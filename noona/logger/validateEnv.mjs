@@ -1,4 +1,3 @@
-// noona/utils/validateEnv.mjs
 import chalk from 'chalk';
 import {
     printDivider,
