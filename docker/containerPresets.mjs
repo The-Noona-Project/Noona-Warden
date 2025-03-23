@@ -47,7 +47,10 @@ export const containerPresets = {
             EndpointsConfig: { 'noona-network': {} }
         },
         Healthcheck: {
-            Test: ['CMD-SHELL', 'echo "db.runCommand(\'ping\').ok" | mongosh localhost:27017/test --quiet'],
+            Test: [
+                'CMD-SHELL',
+                'echo "db.runCommand(\'ping\').ok" | mongosh localhost:27017/test --quiet'
+            ],
             Interval: 10e9,
             Timeout: 5e9,
             Retries: 5,
@@ -112,8 +115,8 @@ export const containerPresets = {
         Image: 'minio/minio:RELEASE.2023-03-20T20-16-18Z',
         name: 'milvus-minio',
         Env: [
-            'MINIO_ACCESS_KEY=minioadmin',
-            'MINIO_SECRET_KEY=minioadmin'
+            `MINIO_ACCESS_KEY=${process.env.MINIO_ACCESS_KEY || 'minioadmin'}`,
+            `MINIO_SECRET_KEY=${process.env.MINIO_SECRET_KEY || 'minioadmin'}`
         ],
         Cmd: ['minio', 'server', '/minio_data'],
         ExposedPorts: { '9000/tcp': {} },

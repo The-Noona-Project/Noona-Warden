@@ -1,63 +1,71 @@
+// docker/downloadImages.mjs
+
 import Docker from 'dockerode';
-import { containerPresets } from './containerPresets.mjs';
+import { handlePullProgress } from './displayPull.mjs';
+import { getImageSize, formatBytes } from './getMetadata.mjs';
 import {
     printResult,
+    printSubHeader,
+    printSpacer,
+    printDivider,
     printError,
-    printSection,
-    printProgressBar
+    printNote
 } from '../noona/logger/logUtils.mjs';
+import { containerPresets } from './containerPresets.mjs';
 
 const docker = new Docker({ socketPath: '/var/run/docker.sock' });
 
 /**
- * Pulls a Docker image and prints a Noona-style visual loading bar.
- * Pulls one image at a time.
- * @param {string} image - Image name to pull
+ * Checks if an image already exists locally
+ * @param {string} imageName
+ * @returns {Promise<boolean>}
  */
-async function pullImageWithNoonaBar(image) {
-    return new Promise((resolve, reject) => {
-        docker.pull(image, (err, stream) => {
-            if (err) return reject(err);
-
-            // ✅ Always show 0% at start
-            printProgressBar(image, 0);
-
-            docker.modem.followProgress(
-                stream,
-                () => {
-                    printProgressBar(image, 100);
-                    printResult(`Pulled: ${image}`);
-                    resolve();
-                },
-                (event) => {
-                    if (event.progressDetail && event.progressDetail.total && event.progressDetail.current) {
-                        const { current, total } = event.progressDetail;
-                        const percent = Math.floor((current / total) * 100);
-                        printProgressBar(image, percent);
-                    }
-                }
-            );
-        });
-    });
+async function imageExistsLocally(imageName) {
+    try {
+        const images = await docker.listImages();
+        return images.some(img => img.RepoTags?.includes(imageName));
+    } catch (err) {
+        printError(`❌ Failed to check local images: ${err.message}`);
+        return false;
+    }
 }
 
 /**
- * Pulls all required Docker images one at a time.
+ * Pulls all required dependency images and shows download status
  */
 export async function pullDependencyImages() {
-    printSection('Pulling Docker Images');
+    printDivider();
+    printSubHeader('📦 Downloading Docker Images');
+    printSubHeader('✔ Pulling Docker Images');
+    printDivider();
 
     const uniqueImages = [
-        ...new Set(Object.values(containerPresets).map((preset) => preset.Image))
+        ...new Set(Object.values(containerPresets).map(p => p.Image))
     ];
 
-    for (let image of uniqueImages) {
+    for (const imageName of uniqueImages) {
+        printSpacer();
+        printSubHeader(`📦 Image: ${imageName}`);
+
         try {
-            await pullImageWithNoonaBar(image);
+            const exists = await imageExistsLocally(imageName);
+
+            if (exists) {
+                printResult(`✔ Reusing image: ${imageName}`);
+                const size = await getImageSize(imageName);
+                printNote(`› Total Size: ${formatBytes(size)}`);
+                printDivider();
+                continue;
+            }
+
+            await handlePullProgress(docker, await docker.pull(imageName), imageName);
+
         } catch (err) {
-            printError(`Failed to pull ${image}: ${err.message}`);
+            printError(`❌ Failed to pull ${imageName}: ${err.message}`);
+            printDivider();
         }
     }
 
-    printResult('All dependency images downloaded');
+    printResult('✔ All dependency images downloaded');
+    printDivider();
 }

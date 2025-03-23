@@ -1,11 +1,13 @@
+// initmain.mjs
+
 import dotenv from 'dotenv';
 dotenv.config();
 
 import {
     printBanner,
-    printResult,
-    printSection,
     printDivider,
+    printSection,
+    printResult,
     printError
 } from './noona/logger/logUtils.mjs';
 
@@ -18,12 +20,12 @@ import { buildFolderTree } from './noona/filesystem/buildTree.mjs';
 import { pullDependencyImages } from './docker/downloadImages.mjs';
 import { createOrStartContainer } from './docker/createOrStartContainer.mjs';
 
-// 🩺 Startup Banner
+// 🩺 Boot Banner
 printBanner('Noona');
 
 (async () => {
     try {
-        // Step 0: Validate Environment
+        // 🌱 0. Validate Environment
         validateEnv(
             [
                 'NODE_ENV',
@@ -48,56 +50,56 @@ printBanner('Noona');
             ]
         );
 
-        // Step 1: Generate JWT Keys
+        // 🔐 1. Generate JWT Keys
         printSection('🔐 Generating JWT Key Pair');
         await generateKeys();
         printResult('✔ JWT Keys generated');
 
-        // Step 2: Docker Access Check
+        // 🐳 2. Check Docker Access
         printSection('🐳 Checking Docker Access');
         const Docker = (await import('dockerode')).default;
         const docker = new Docker({ socketPath: '/var/run/docker.sock' });
         const version = await docker.version();
         printResult(`✔ Docker Version: ${version.Version}`);
 
-        // Step 3: Stop Existing Containers
+        // 🛑 3. Stop Running Containers
         printSection('🛑 Stopping Running Noona Containers');
         await stopRunningNoonaContainers();
         printResult('✔ Noona containers stopped');
 
-        // Step 4: Create Required Networks
+        // 🌐 4. Ensure Docker Networks Exist
         printSection('🌐 Ensuring Networks Exist');
         await ensureNetworkExists('bridge');
         await ensureNetworkExists('noona-network');
         printResult('✔ Docker networks ready');
 
-        // Step 5: Connect Warden to Networks
+        // 🔗 5. Connect Warden to Networks
         printSection('🔗 Connecting Warden to Networks');
         const wardenContainerId = process.env.HOSTNAME;
         const networksToConnect = ['bridge', 'noona-network'];
 
-        for (const netName of networksToConnect) {
+        for (const net of networksToConnect) {
             try {
-                const network = docker.getNetwork(netName);
+                const network = docker.getNetwork(net);
                 await network.connect({ Container: wardenContainerId });
-                printResult(`✔ Connected to network: ${netName}`);
+                printResult(`✔ Connected to network: ${net}`);
             } catch (err) {
                 if (!err.message.includes('already exists')) {
-                    printError(`❌ Failed to connect to ${netName}: ${err.message}`);
+                    printError(`❌ Failed to connect to ${net}: ${err.message}`);
                 }
             }
         }
 
-        // Step 6: Create Folder Tree
+        // 📂 6. Build Project Folder Tree
         printSection('📂 Building Folder Tree');
         await buildFolderTree();
 
-        // Step 7: Pull Docker Images
+        // 📦 7. Pull All Docker Images
         printSection('📦 Downloading Docker Images');
         await pullDependencyImages();
         printResult('✔ All dependency images downloaded');
 
-        // Step 8: Start Containers One-by-One
+        // 🚀 8. Start All Dependency Containers
         printSection('🚀 Creating and Starting Containers');
         await createOrStartContainer('noona-redis');
         await createOrStartContainer('noona-mongodb');
@@ -107,12 +109,12 @@ printBanner('Noona');
         await createOrStartContainer('noona-milvus');
         printResult('✔ Dependency containers created & started');
 
-        // Step 9: Send Public JWT Key to Redis
+        // 📨 9. Send Public JWT Key to Redis
         printSection('📨 Sending JWT Public Key to Redis');
         await sendPublicKeyToRedis();
         printResult('✔ Public key shared with Redis');
 
-        // Done!
+        // ✅ Done!
         printDivider();
         printResult('✅ Noona-Warden Boot Complete');
         printDivider();

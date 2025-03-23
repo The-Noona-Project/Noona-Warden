@@ -1,3 +1,5 @@
+// noona/logger/validateEnv.mjs
+
 import chalk from 'chalk';
 import {
     printDivider,
@@ -34,7 +36,7 @@ export function validateEnv(requiredKeys = [], optionalKeys = []) {
 
     if (missingRequired.length > 0) {
         printDivider();
-        printError('❌ Missing Required Environment Variables:\n');
+        printError('Missing Required Environment Variables:\n');
         for (const key of missingRequired) {
             console.log(`  ${chalk.redBright('•')} ${chalk.bold(key)}`);
         }
@@ -44,13 +46,13 @@ export function validateEnv(requiredKeys = [], optionalKeys = []) {
     }
 
     if (missingOptional.length > 0) {
-        printWarning('⚠ Missing Optional Environment Variables:\n');
+        printWarning('Missing Optional Environment Variables:\n');
         for (const key of missingOptional) {
             console.log(`  ${chalk.yellow('•')} ${chalk.bold(key)}`);
         }
         console.log();
     }
 
-    printResult('✔ Environment validated');
+    printResult('Environment validated');
     printDivider();
 }
