@@ -4,12 +4,13 @@ import Docker from 'dockerode';
 import { handlePullProgress } from './displayPull.mjs';
 import { getImageSize, formatBytes } from './getMetadata.mjs';
 import {
-    printResult,
     printSubHeader,
     printSpacer,
     printDivider,
     printError,
-    printNote
+    printNote,
+    printDownloadSummary, // New summary function
+    printResult
 } from '../noona/logger/logUtils.mjs';
 import { containerPresets } from './containerPresets.mjs';
 
@@ -31,12 +32,11 @@ async function imageExistsLocally(imageName) {
 }
 
 /**
- * Pulls all required dependency images and shows download status
+ * Pulls all required dependency images and displays download status.
  */
 export async function pullDependencyImages() {
     printDivider();
     printSubHeader('📦 Downloading Docker Images');
-    printSubHeader('✔ Pulling Docker Images');
     printDivider();
 
     const uniqueImages = [
@@ -53,7 +53,7 @@ export async function pullDependencyImages() {
             if (exists) {
                 printResult(`✔ Reusing image: ${imageName}`);
                 const size = await getImageSize(imageName);
-                printNote(`› Total Size: ${formatBytes(size)}`);
+                printNote(`› › Total Size: ${formatBytes(size)}`);
                 printDivider();
                 continue;
             }
@@ -66,6 +66,5 @@ export async function pullDependencyImages() {
         }
     }
 
-    printResult('✔ All dependency images downloaded');
-    printDivider();
+    printDownloadSummary(); // Clear, concise summary after all images are downloaded
 }

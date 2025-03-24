@@ -35,11 +35,11 @@ export function printHeader(title) {
 }
 
 export function printSubHeader(text) {
-    console.log(`${timestamp()} ${chalk.bold('✔')} ${chalk.cyan(text)}`);
+    console.log(`${timestamp()} ${chalk.bold('❇️')} ${chalk.cyan(text)}`);
 }
 
 export function printNote(text) {
-    console.log(`${timestamp()} ${chalk.gray('›')} ${chalk.italic(text)}`);
+    console.log(`${timestamp()} ${chalk.bold('🔻')} ${chalk.gray('› ›')} ${chalk.italic(text)}`);
 }
 
 export function printAction(text) {
@@ -62,13 +62,13 @@ export function printStep(text) {
     console.log(`${timestamp()} ${chalk.yellow('⚙')} ${text}`);
 }
 
-export function printProgressBar(label, percent, size = '') {
-    const filledLength = Math.round((percent / 100) * 20);
-    const bar = chalk.green('█'.repeat(filledLength)) + chalk.gray('░'.repeat(20 - filledLength));
-    const paddedPercent = percent.toString().padStart(3, ' ') + '%';
-    const paddedLabel = label.padEnd(24);
-    const suffix = size ? chalk.gray(`(${size})`) : '';
-    console.log(`${timestamp()} [${bar}] ${paddedPercent} ${chalk.gray(paddedLabel)} ${suffix}`);
+// Updated Progress Bar for your desired look
+export function printProgressBar(label, percent, extraInfo = '') {
+    const width = 20;
+    const filledLength = Math.round((percent / 100) * width);
+    const bar = chalk.green('░'.repeat(filledLength)) + chalk.gray('░'.repeat(width - filledLength));
+    const percentText = `${percent}%`.padEnd(7);
+    console.log(`${timestamp()} ${chalk.green('✔')} [${bar}]     ${percentText} ${extraInfo}`);
 }
 
 export function printBanner(label = 'Noona') {
@@ -91,4 +91,11 @@ export function printBanner(label = 'Noona') {
 
 export function printDebug(text) {
     console.log(`${timestamp()} ${chalk.magenta('DEBUG:')} ${text}`);
+}
+
+// ✅ New dedicated helper function to print the final summary after all images downloaded
+export function printDownloadSummary() {
+    printDivider();
+    printResult('✔ ✔ All dependency images downloaded');
+    printDivider();
 }

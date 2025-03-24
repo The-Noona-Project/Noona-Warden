@@ -6,13 +6,12 @@ import {
     printNote,
     printResult,
     printDivider,
-    printError,
-    printDebug
+    printError
 } from '../noona/logger/logUtils.mjs';
 import { formatBytes, ordinalSuffix } from './getMetadata.mjs';
 
 /**
- * Handles Docker image pull progress with milestone logging per layer.
+ * Handles Docker image pull progress with precise milestone logging per layer.
  * @param {import('dockerode')} docker - Dockerode instance
  * @param {NodeJS.ReadableStream} stream - Docker pull stream
  * @param {string} imageName - Name of the Docker image
@@ -20,71 +19,64 @@ import { formatBytes, ordinalSuffix } from './getMetadata.mjs';
 export async function handlePullProgress(docker, stream, imageName) {
     return new Promise((resolve, reject) => {
         try {
-            const layers = {};       // Layer data by ID
-            const milestones = [0, 0.2, 0.4, 0.6, 0.8, 1.0]; // 6 milestones including 0% and 100%
-            const printed = {};     // Tracks printed milestones per layer
+            const layers = {};
+            const printed = {};
 
             docker.modem.followProgress(stream, onFinished, onProgress);
 
             function onProgress(event) {
                 const { id, progressDetail, status } = event;
 
-                // Debug log for every event
-                printDebug(`Event: ${JSON.stringify(event)}`);
+                if (!id || !progressDetail || !progressDetail.total) return;
 
-                if (!id || !progressDetail || !progressDetail.total || !progressDetail.current) return;
-
-                const current = progressDetail.current;
-                const total = progressDetail.total;
-
-                // Initialize layer data if first time
                 if (!layers[id]) {
-                    layers[id] = { current: 0, total };
-                    printed[id] = new Set();
+                    layers[id] = {
+                        current: 0,
+                        total: progressDetail.total,
+                        index: Object.keys(layers).length + 1
+                    };
+                    printed[id] = { zero: false, hundred: false };
 
-                    const index = Object.keys(layers).length;
-                    const readableSize = formatBytes(total);
-                    printSubHeader(`Downloading ${ordinalSuffix(index)} layer: ${id}`);
-                    printNote(`› Size: ${readableSize}`);
+                    const readableSize = formatBytes(layers[id].total);
+                    printSubHeader(`❇️ Downloading ${ordinalSuffix(layers[id].index)} layer: ${id}`);
+                    printNote(`Size: ${readableSize}`);
+
+                    const bar = makeLoadBar(0);
+                    printResult(`🔻 ${bar} 0% of ${ordinalSuffix(layers[id].index)} layer ${id}`);
+                    printed[id].zero = true;
                 }
 
-                layers[id].current = current;
+                layers[id].current = progressDetail.current;
 
-                const ratio = current / total;
-                for (let i = 0; i < milestones.length; i++) {
-                    const threshold = milestones[i];
-                    const key = `${Math.floor(threshold * 100)}%`;
-
-                    // Check if the milestone is passed, and print a progress bar
-                    if (ratio >= threshold && !printed[id].has(key)) {
-                        printed[id].add(key);
-                        const bar = makeLoadBar(threshold);
-                        printResult(`${bar} ${key} of layer ${id}`);
-                    }
+                // Log at completion
+                if (progressDetail.current >= progressDetail.total && !printed[id].hundred) {
+                    const bar = makeLoadBar(100);
+                    printResult(`✔ ${bar} 100% of ${ordinalSuffix(layers[id].index)} layer ${id}`);
+                    printed[id].hundred = true;
                 }
 
-                // If the event indicates a skipped layer due to caching, display progress manually
-                if (status.includes('Cached') || status.includes('No downloadable layers')) {
-                    if (!layers[id].current || layers[id].current === 0) {
-                        const bar = makeLoadBar(1);
-                        printResult(`${bar} 100% of layer ${id} (cached)`);
+                // Log cached or existing layers
+                if (status.includes('Cached') || status.includes('Already exists')) {
+                    if (!printed[id].hundred) {
+                        const bar = makeLoadBar(100);
+                        printResult(`✔ ${bar} 100% of ${ordinalSuffix(layers[id].index)} layer ${id} (cached)`);
+                        printed[id].hundred = true;
                     }
                 }
             }
 
             async function onFinished(err) {
                 if (err) {
-                    printError(`Failed to pull image: ${imageName}`);
+                    printError(`❌ Failed to pull image: ${imageName}`);
                     return reject(err);
                 }
 
-                // Sum layer sizes for a rough total
                 const totalSize = Object.values(layers).reduce((acc, l) => acc + l.total, 0);
                 if (totalSize === 0) {
-                    printResult(`No downloadable layers found. Likely cached image: ${imageName}`);
+                    printResult(`✔ Pulled: ${imageName} (cached)`);
                 } else {
                     printResult(`✔ Pulled: ${imageName}`);
-                    printNote(`› Total Size: ${formatBytes(totalSize)}`);
+                    printNote(`› › Total Size: ${formatBytes(totalSize)}`);
                 }
 
                 printDivider();
@@ -92,7 +84,7 @@ export async function handlePullProgress(docker, stream, imageName) {
             }
 
         } catch (err) {
-            printError(`Error during pull of ${imageName}: ${err.message}`);
+            printError(`❌ Error during pull of ${imageName}: ${err.message}`);
             reject(err);
         }
     });
