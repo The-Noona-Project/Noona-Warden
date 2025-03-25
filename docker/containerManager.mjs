@@ -1,5 +1,8 @@
 // docker/containerManager.mjs
 
+import dotenv from 'dotenv';
+dotenv.config({ path: '/noona/family/noona-warden/settings/config.env' });
+
 import Docker from 'dockerode';
 import {
     printResult,

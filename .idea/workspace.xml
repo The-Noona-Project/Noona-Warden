@@ -4,9 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Key gen logic working and saving&#10;New &quot;Family&quot; folders tree&#10;touched up docker pulling&#10;added printDebug and respects .env&#10;connects and sends public key to redis&#10;added debug msgs around">
+    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/noona/filesystem/buildTree.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/filesystem/buildTree.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/containerManager.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/containerManager.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/containerPresets.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/containerPresets.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/createOrStartContainer.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/createOrStartContainer.mjs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,6 +89,7 @@
       <recent name="F:\The-Noona-Project\Noona-Warden" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\The-Noona-Project\Noona-Warden\family\noona-warden\settings" />
       <recent name="F:\The-Noona-Project\Noona-Warden\noona\logger" />
       <recent name="F:\The-Noona-Project\Noona-Warden" />
     </key>
@@ -97,7 +103,7 @@
         <settings>
           <option name="imageTag" value="noona-warden" />
           <option name="containerName" value="noona-warden" />
-          <option name="commandLineOptions" value="--env-file .env" />
+          <option name="commandLineOptions" value="--env-file ./family/noona-warden/settings/config.env " />
           <option name="sourceFilePath" value="Dockerfile" />
           <option name="volumeBindings">
             <list>
@@ -179,7 +185,11 @@
       <workItem from="1742874444781" duration="1761000" />
       <workItem from="1742900042759" duration="47000" />
       <workItem from="1742900235806" duration="10000" />
-      <workItem from="1742900351889" duration="803000" />
+      <workItem from="1742900351889" duration="900000" />
+      <workItem from="1742931347468" duration="586000" />
+      <workItem from="1742931946671" duration="1662000" />
+      <workItem from="1742934042705" duration="1212000" />
+      <workItem from="1742935315389" duration="302000" />
     </task>
     <task id="LOCAL-00001" summary="init Push">
       <option name="closed" value="true" />
@@ -245,11 +255,22 @@
       <option name="project" value="LOCAL" />
       <updated>1742876214882</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Updated buildTree.mjs to work as an absolute path and updated logic">
+      <option name="closed" value="true" />
+      <created>1742901256639</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1742901256639</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.template" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -269,6 +290,7 @@
     <MESSAGE value="oooh i suck at commits" />
     <MESSAGE value="DOCKER PULL COMPLETE!" />
     <MESSAGE value="Key gen logic working and saving&#10;New &quot;Family&quot; folders tree&#10;touched up docker pulling&#10;added printDebug and respects .env&#10;connects and sends public key to redis&#10;added debug msgs around" />
-    <option name="LAST_COMMIT_MESSAGE" value="Key gen logic working and saving&#10;New &quot;Family&quot; folders tree&#10;touched up docker pulling&#10;added printDebug and respects .env&#10;connects and sends public key to redis&#10;added debug msgs around" />
+    <MESSAGE value="Updated buildTree.mjs to work as an absolute path and updated logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated buildTree.mjs to work as an absolute path and updated logic" />
   </component>
 </project>

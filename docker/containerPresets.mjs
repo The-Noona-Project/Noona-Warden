@@ -1,7 +1,9 @@
 // docker/containerPresets.mjs
 
+import dotenv from 'dotenv';
+dotenv.config({ path: '/noona/family/noona-warden/settings/config.env' });
+
 // Base path on the host where the noona-family directory is mounted.
-// The user should mount their local "noona-family" folder to /noona/family in the container.
 const FAMILY_MOUNT_BASE = '/noona/family';
 
 export const containerPresets = {
@@ -13,8 +15,7 @@ export const containerPresets = {
             PortBindings: {
                 '6379/tcp': [{ HostPort: process.env.REDIS_PORT || '6379' }]
             },
-            // Mount from the "files" folder under Noona-Vault's noona-redis dependency.
-            Binds: [`${FAMILY_MOUNT_BASE}/Noona-Vault/depends/noona-redis/files:/data`],
+            Binds: [`${FAMILY_MOUNT_BASE}/noona-vault/depends/noona-redis/files:/data`],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -39,10 +40,9 @@ export const containerPresets = {
         ],
         HostConfig: {
             PortBindings: {
-                '27017/tcp': [{ HostPort: '27017' }]
+                '27017/tcp': [{ HostPort: process.env.MONGODB_PORT || '27017' }]
             },
-            // Mount from the "files" folder under Noona-Vault's noona-mongodb dependency.
-            Binds: [`${FAMILY_MOUNT_BASE}/Noona-Vault/depends/noona-mongodb/files:/data/db`],
+            Binds: [`${FAMILY_MOUNT_BASE}/noona-vault/depends/noona-mongodb/files:/data/db`],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -72,10 +72,9 @@ export const containerPresets = {
         ],
         HostConfig: {
             PortBindings: {
-                '3306/tcp': [{ HostPort: '3306' }]
+                '3306/tcp': [{ HostPort: process.env.MARIADB_PORT || '3306' }]
             },
-            // Mount from the "files" folder under Noona-Vault's noona-mariadb dependency.
-            Binds: [`${FAMILY_MOUNT_BASE}/Noona-Vault/depends/noona-mariadb/files:/var/lib/mysql`],
+            Binds: [`${FAMILY_MOUNT_BASE}/noona-vault/depends/noona-mariadb/files:/var/lib/mysql`],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -100,8 +99,7 @@ export const containerPresets = {
             '--data-dir=/etcd'
         ],
         HostConfig: {
-            // Mount from the "files" folder under Noona-Vault's noona-milvus dependency for etcd.
-            Binds: [`${FAMILY_MOUNT_BASE}/Noona-Vault/depends/noona-milvus/depends/noona-etcd/files:/etcd`],
+            Binds: [`${FAMILY_MOUNT_BASE}/noona-vault/depends/noona-milvus/depends/noona-etcd/files:/etcd`],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -126,10 +124,9 @@ export const containerPresets = {
         ExposedPorts: { '9000/tcp': {} },
         HostConfig: {
             PortBindings: {
-                '9000/tcp': [{ HostPort: '9000' }]
+                '9000/tcp': [{ HostPort: process.env.MINIO_PORT || '9000' }]
             },
-            // Mount from the "files" folder under Noona-Vault's noona-milvus dependency for minio.
-            Binds: [`${FAMILY_MOUNT_BASE}/Noona-Vault/depends/noona-milvus/depends/noona-minio/files:/minio_data`],
+            Binds: [`${FAMILY_MOUNT_BASE}/noona-vault/depends/noona-milvus/depends/noona-minio/files:/minio_data`],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -157,11 +154,10 @@ export const containerPresets = {
         },
         HostConfig: {
             PortBindings: {
-                '19530/tcp': [{ HostPort: '19530' }],
+                '19530/tcp': [{ HostPort: process.env.MILVUS_PORT || '19530' }],
                 '9091/tcp': [{ HostPort: '9091' }]
             },
-            // Mount from the "files" folder under Noona-Vault's noona-milvus dependency.
-            Binds: [`${FAMILY_MOUNT_BASE}/Noona-Vault/depends/noona-milvus/files:/var/lib/milvus`],
+            Binds: [`${FAMILY_MOUNT_BASE}/noona-vault/depends/noona-milvus/files:/var/lib/milvus`],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {

@@ -1,5 +1,8 @@
 // docker/createOrStartContainer.mjs
 
+import dotenv from 'dotenv';
+dotenv.config({ path: '/noona/family/noona-warden/settings/config.env' });
+
 import Docker from 'dockerode';
 import {
     printAction,
@@ -17,6 +20,7 @@ const docker = new Docker({ socketPath: '/var/run/docker.sock' });
 /**
  * Creates or starts a container using a preset definition.
  * Reuses the image if it's already available locally.
+ *
  * @param {string} containerName - Name of the container to create or start
  */
 export async function createOrStartContainer(containerName) {
@@ -47,9 +51,9 @@ export async function createOrStartContainer(containerName) {
         }
 
         const images = await docker.listImages();
-        const isPulled = images.some(img => {
-            return img.RepoTags?.includes(imageName) || img.RepoTags?.includes(`${imageName}:latest`);
-        });
+        const isPulled = images.some(img =>
+            img.RepoTags?.includes(imageName) || img.RepoTags?.includes(`${imageName}:latest`)
+        );
 
         if (isPulled) {
             printNote(`✔ Reusing local image: ${imageName}`);
@@ -65,7 +69,7 @@ export async function createOrStartContainer(containerName) {
                             printResult(`✔ Pulled image: ${imageName}`);
                             resolve();
                         },
-                        () => {} // Optional per-layer progress
+                        () => {} // optional progress handler
                     );
                 });
             });
