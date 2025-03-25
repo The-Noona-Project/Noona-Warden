@@ -4,16 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="DOCKER PULL COMPLETE!">
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/buildNetwork.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/buildNetwork.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/containerPresets.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/containerPresets.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/initmain.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/initmain.mjs" afterDir="false" />
+    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Key gen logic working and saving&#10;New &quot;Family&quot; folders tree&#10;touched up docker pulling&#10;added printDebug and respects .env&#10;connects and sends public key to redis&#10;added debug msgs around">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/noona/filesystem/buildTree.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/filesystem/buildTree.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/noona/jwt/generateKeys.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/jwt/generateKeys.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/noona/jwt/sendToRedis.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/jwt/sendToRedis.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/noona/logger/logUtils.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/logger/logUtils.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/noona/logger/validateEnv.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/logger/validateEnv.mjs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,32 +53,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml.noona-warden: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.initmain.mjs.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/The-Noona-Project/Noona-Warden&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Docker.Dockerfile.executor": "Run",
+    "Docker.docker-compose.yml.noona-warden: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
+    "Node.js.initmain.mjs.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "F:/The-Noona-Project/Noona-Warden",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="F:\The-Noona-Project\Noona-Warden" />
@@ -183,7 +176,10 @@
       <workItem from="1742852637063" duration="167000" />
       <workItem from="1742852924452" duration="5045000" />
       <workItem from="1742866935143" duration="6517000" />
-      <workItem from="1742874444781" duration="1240000" />
+      <workItem from="1742874444781" duration="1761000" />
+      <workItem from="1742900042759" duration="47000" />
+      <workItem from="1742900235806" duration="10000" />
+      <workItem from="1742900351889" duration="803000" />
     </task>
     <task id="LOCAL-00001" summary="init Push">
       <option name="closed" value="true" />
@@ -241,7 +237,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742829141682</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Key gen logic working and saving&#10;New &quot;Family&quot; folders tree&#10;touched up docker pulling&#10;added printDebug and respects .env&#10;connects and sends public key to redis&#10;added debug msgs around">
+      <option name="closed" value="true" />
+      <created>1742876214882</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1742876214882</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -264,6 +268,7 @@
     <MESSAGE value="uuuuuhhh dont look XD" />
     <MESSAGE value="oooh i suck at commits" />
     <MESSAGE value="DOCKER PULL COMPLETE!" />
-    <option name="LAST_COMMIT_MESSAGE" value="DOCKER PULL COMPLETE!" />
+    <MESSAGE value="Key gen logic working and saving&#10;New &quot;Family&quot; folders tree&#10;touched up docker pulling&#10;added printDebug and respects .env&#10;connects and sends public key to redis&#10;added debug msgs around" />
+    <option name="LAST_COMMIT_MESSAGE" value="Key gen logic working and saving&#10;New &quot;Family&quot; folders tree&#10;touched up docker pulling&#10;added printDebug and respects .env&#10;connects and sends public key to redis&#10;added debug msgs around" />
   </component>
 </project>
