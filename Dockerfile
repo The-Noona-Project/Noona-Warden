@@ -1,12 +1,8 @@
 # Dockerfile
 FROM node:20-slim
 
-# Set environment variables
-ENV NODE_ENV=production
-ENV PROJECT_NAME="The Noona Project"
-
 # Create working directory
-WORKDIR /noona/warden
+WORKDIR /noona
 
 # Copy package definition files and install dependencies
 COPY package*.json ./

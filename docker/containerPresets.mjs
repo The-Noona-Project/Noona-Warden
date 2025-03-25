@@ -1,9 +1,9 @@
 // docker/containerPresets.mjs
 
-/**
- * Preset Docker container definitions for Noona-Warden to manage.
- * These are used for both image pulling and container creation.
- */
+// Base path on the host where the noona-family directory is mounted.
+// The user should mount their local "noona-family" folder to /noona/family in the container.
+const FAMILY_MOUNT_BASE = '/noona/family';
+
 export const containerPresets = {
     'noona-redis': {
         Image: 'redis:alpine',
@@ -13,7 +13,8 @@ export const containerPresets = {
             PortBindings: {
                 '6379/tcp': [{ HostPort: process.env.REDIS_PORT || '6379' }]
             },
-            Binds: ['/noona/Noona-Vault/Redis:/data'],
+            // Mount from the "files" folder under Noona-Vault's noona-redis dependency.
+            Binds: [`${FAMILY_MOUNT_BASE}/Noona-Vault/depends/noona-redis/files:/data`],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -40,7 +41,8 @@ export const containerPresets = {
             PortBindings: {
                 '27017/tcp': [{ HostPort: '27017' }]
             },
-            Binds: ['/noona/Noona-Vault/MongoDB:/data/db'],
+            // Mount from the "files" folder under Noona-Vault's noona-mongodb dependency.
+            Binds: [`${FAMILY_MOUNT_BASE}/Noona-Vault/depends/noona-mongodb/files:/data/db`],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -72,7 +74,8 @@ export const containerPresets = {
             PortBindings: {
                 '3306/tcp': [{ HostPort: '3306' }]
             },
-            Binds: ['/noona/Noona-Vault/MariaDB:/var/lib/mysql'],
+            // Mount from the "files" folder under Noona-Vault's noona-mariadb dependency.
+            Binds: [`${FAMILY_MOUNT_BASE}/Noona-Vault/depends/noona-mariadb/files:/var/lib/mysql`],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -87,9 +90,9 @@ export const containerPresets = {
         }
     },
 
-    'milvus-etcd': {
+    'noona-etcd': {
         Image: 'quay.io/coreos/etcd:v3.5.5',
-        name: 'milvus-etcd',
+        name: 'noona-etcd',
         Cmd: [
             'etcd',
             '-advertise-client-urls=http://127.0.0.1:2379',
@@ -97,7 +100,8 @@ export const containerPresets = {
             '--data-dir=/etcd'
         ],
         HostConfig: {
-            Binds: ['/noona/Noona-Vault/Etcd:/etcd'],
+            // Mount from the "files" folder under Noona-Vault's noona-milvus dependency for etcd.
+            Binds: [`${FAMILY_MOUNT_BASE}/Noona-Vault/depends/noona-milvus/depends/noona-etcd/files:/etcd`],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -111,12 +115,12 @@ export const containerPresets = {
         }
     },
 
-    'milvus-minio': {
+    'noona-minio': {
         Image: 'minio/minio:RELEASE.2023-03-20T20-16-18Z',
-        name: 'milvus-minio',
+        name: 'noona-minio',
         Env: [
             `MINIO_ACCESS_KEY=${process.env.MINIO_ACCESS_KEY || 'minioadmin'}`,
-            `MINIO_SECRET_KEY=${process.env.MINIO_SECRET_KEY || 'minioadmin'}`
+            `MINIO_SECRET_KEY=${process.env.MINIO_SECRET_KEY || 'miniopass'}`
         ],
         Cmd: ['minio', 'server', '/minio_data'],
         ExposedPorts: { '9000/tcp': {} },
@@ -124,7 +128,8 @@ export const containerPresets = {
             PortBindings: {
                 '9000/tcp': [{ HostPort: '9000' }]
             },
-            Binds: ['/noona/Noona-Vault/Minio:/minio_data'],
+            // Mount from the "files" folder under Noona-Vault's noona-milvus dependency for minio.
+            Binds: [`${FAMILY_MOUNT_BASE}/Noona-Vault/depends/noona-milvus/depends/noona-minio/files:/minio_data`],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -155,7 +160,8 @@ export const containerPresets = {
                 '19530/tcp': [{ HostPort: '19530' }],
                 '9091/tcp': [{ HostPort: '9091' }]
             },
-            Binds: ['/noona/Noona-Vault/Milvus:/var/lib/milvus'],
+            // Mount from the "files" folder under Noona-Vault's noona-milvus dependency.
+            Binds: [`${FAMILY_MOUNT_BASE}/Noona-Vault/depends/noona-milvus/files:/var/lib/milvus`],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {

@@ -20,12 +20,12 @@ import { buildFolderTree } from './noona/filesystem/buildTree.mjs';
 import { pullDependencyImages } from './docker/downloadImages.mjs';
 import { createOrStartContainer } from './docker/createOrStartContainer.mjs';
 
-// 🩺 Boot Banner
+// Boot Banner
 printBanner('Noona');
 
 (async () => {
     try {
-        // 🌱 0. Validate Environment
+        // Validate Environment Variables
         validateEnv(
             [
                 'NODE_ENV',
@@ -33,8 +33,7 @@ printBanner('Noona');
                 'MONGO_USER',
                 'MONGO_PASSWORD',
                 'MONGO_DATABASE',
-                'REDIS_HOST',
-                'REDIS_PORT',
+                'REDIS_URL',
                 'MARIADB_USER',
                 'MARIADB_PASSWORD',
                 'MARIADB_DATABASE',
@@ -50,81 +49,80 @@ printBanner('Noona');
             ]
         );
 
-        // 🔐 1. Generate JWT Keys
-        printSection('🔐 Generating JWT Key Pair');
+        // Generate & Store JWT Keys
+        printSection('Generating & Storing JWT Keys');
         await generateKeys();
-        printResult('✔ JWT Keys generated');
+        printResult('JWT Keys generated and stored');
 
-        // 🐳 2. Check Docker Access
-        printSection('🐳 Checking Docker Access');
+        // Check Docker Access
+        printSection('Checking Docker Access');
         const Docker = (await import('dockerode')).default;
         const docker = new Docker({ socketPath: '/var/run/docker.sock' });
         const version = await docker.version();
-        printResult(`✔ Docker Version: ${version.Version}`);
+        printResult(`Docker Version: ${version.Version}`);
 
-        // 🛑 3. Stop Running Containers
-        printSection('🛑 Stopping Running Noona Containers');
+        // Stop Running Noona Containers
+        printSection('Stopping Running Noona Containers');
         await stopRunningNoonaContainers();
-        printResult('✔ Noona containers stopped');
+        printResult('Noona containers stopped');
 
-        // 🌐 4. Ensure Docker Networks Exist
-        printSection('🌐 Ensuring Networks Exist');
+        // Ensure Docker Networks Exist
+        printSection('Ensuring Docker Networks Exist');
         await ensureNetworkExists('bridge');
         await ensureNetworkExists('noona-network');
-        printResult('✔ Docker networks ready');
+        printResult('Docker networks ready');
 
-        // 🔗 5. Connect Warden to Networks
-        printSection('🔗 Connecting Warden to Networks');
+        // Connect Warden to Networks
+        printSection('Connecting Warden to Networks');
         const wardenContainerId = process.env.HOSTNAME;
         const networksToConnect = ['bridge', 'noona-network'];
-
         for (const net of networksToConnect) {
             try {
                 const network = docker.getNetwork(net);
                 await network.connect({ Container: wardenContainerId });
-                printResult(`✔ Connected to network: ${net}`);
+                printResult(`Connected to network: ${net}`);
             } catch (err) {
                 if (!err.message.includes('already exists')) {
-                    printError(`❌ Failed to connect to ${net}: ${err.message}`);
+                    printError(`Failed to connect to ${net}: ${err.message}`);
                 }
             }
         }
 
-        // 📂 6. Build Project Folder Tree
-        printSection('📂 Building Folder Tree');
+        // Build Noona Project Folder Tree
+        printSection('Building Noona Project Folder Tree');
         await buildFolderTree();
 
-        // 📦 7. Pull All Docker Images
-        printSection('📦 Downloading Docker Images');
+        // Pull Dependency Docker Images
+        printSection('Downloading Dependency Docker Images');
         await pullDependencyImages();
-        printResult('✔ All dependency images downloaded');
+        printResult('All dependency images downloaded');
 
-        // 🚀 8. Start All Dependency Containers
-        printSection('🚀 Creating and Starting Containers');
+        // Create & Start Dependency Containers
+        printSection('Creating & Starting Dependency Containers');
         await createOrStartContainer('noona-redis');
         await createOrStartContainer('noona-mongodb');
         await createOrStartContainer('noona-mariadb');
-        await createOrStartContainer('milvus-etcd');
-        await createOrStartContainer('milvus-minio');
+        await createOrStartContainer('noona-etcd');
+        await createOrStartContainer('noona-minio');
         await createOrStartContainer('noona-milvus');
-        printResult('✔ Dependency containers created & started');
+        printResult('Dependency containers created & started');
 
-        // 📨 9. Send Public JWT Key to Redis
-        printSection('📨 Sending JWT Public Key to Redis');
+        // Send Public JWT Key to Redis
+        printSection('Sending Public JWT Key to Redis');
         await sendPublicKeyToRedis();
-        printResult('✔ Public key shared with Redis');
+        printResult('Public JWT Key shared with Redis');
 
-        // ✅ Done!
+        // Boot Complete
         printDivider();
-        printResult('✅ Noona-Warden Boot Complete');
+        printResult('Noona-Warden Boot Complete');
         printDivider();
     } catch (err) {
         if (err?.code === 'EACCES') {
-            printError('❌ Docker socket not accessible: EACCES /var/run/docker.sock');
+            printError('Docker socket not accessible: EACCES /var/run/docker.sock');
         } else if (err?.code === 'ECONNREFUSED') {
-            printError('❌ Docker socket not accessible: ECONNREFUSED /var/run/docker.sock');
+            printError('Docker socket not accessible: ECONNREFUSED /var/run/docker.sock');
         } else {
-            printError('❌ Boot error:');
+            printError('Boot error:');
             console.error(err);
         }
         process.exit(1);

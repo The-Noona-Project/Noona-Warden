@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="DOCKER PULL COMPLETE!">
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/buildNetwork.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/buildNetwork.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/containerPresets.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/containerPresets.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/initmain.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/initmain.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/filesystem/buildTree.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/filesystem/buildTree.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/jwt/generateKeys.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/jwt/generateKeys.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/jwt/sendToRedis.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/jwt/sendToRedis.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/logger/logUtils.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/logger/logUtils.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/logger/validateEnv.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/logger/validateEnv.mjs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dockerfile" />
+        <option value="package.json" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Captainpax&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/The-Noona-Project/Noona-Warden&quot;,
+    &quot;accountId&quot;: &quot;c48dc6e5-8a5d-4d34-919b-3b5f20d4d9f4&quot;
+  }
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2uTKqxPSJnWYT7cfkeKRFrFtzLc" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml.noona-warden: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.initmain.mjs.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/The-Noona-Project/Noona-Warden&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\The-Noona-Project\Noona-Warden" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\The-Noona-Project\Noona-Warden\noona\logger" />
+      <recent name="F:\The-Noona-Project\Noona-Warden" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Docker.Dockerfile">
+    <configuration name="initmain.mjs" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/initmain.mjs" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="imageTag" value="noona-warden" />
+          <option name="containerName" value="noona-warden" />
+          <option name="commandLineOptions" value="--env-file .env" />
+          <option name="sourceFilePath" value="Dockerfile" />
+          <option name="volumeBindings">
+            <list>
+              <DockerVolumeBindingImpl>
+                <option name="containerPath" value="/var/run/docker.sock" />
+                <option name="hostPath" value="//var/run/docker.sock" />
+              </DockerVolumeBindingImpl>
+              <DockerVolumeBindingImpl>
+                <option name="containerPath" value="/noona/family" />
+                <option name="hostPath" value="F:\The-Noona-Project\Noona-Family" />
+              </DockerVolumeBindingImpl>
+            </list>
+          </option>
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Docker.Dockerfile" />
+      <item itemvalue="Node.js.initmain.mjs" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Docker.Dockerfile" />
+        <item itemvalue="Node.js.initmain.mjs" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="" />
+      <created>1742267319014</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1742267319014</updated>
+      <workItem from="1742267320190" duration="17000" />
+      <workItem from="1742703123477" duration="623000" />
+      <workItem from="1742703794981" duration="147000" />
+      <workItem from="1742703965864" duration="750000" />
+      <workItem from="1742706836473" duration="2892000" />
+      <workItem from="1742709864327" duration="2637000" />
+      <workItem from="1742713115193" duration="276000" />
+      <workItem from="1742713537039" duration="4000" />
+      <workItem from="1742713548100" duration="58000" />
+      <workItem from="1742713838060" duration="4742000" />
+      <workItem from="1742718712298" duration="2115000" />
+      <workItem from="1742721100304" duration="3074000" />
+      <workItem from="1742724985909" duration="2201000" />
+      <workItem from="1742727232519" duration="448000" />
+      <workItem from="1742754033231" duration="8136000" />
+      <workItem from="1742762433391" duration="10931000" />
+      <workItem from="1742786883606" duration="6000" />
+      <workItem from="1742821192336" duration="4031000" />
+      <workItem from="1742845749577" duration="1258000" />
+      <workItem from="1742852637063" duration="167000" />
+      <workItem from="1742852924452" duration="5045000" />
+      <workItem from="1742866935143" duration="6517000" />
+      <workItem from="1742874444781" duration="1240000" />
+    </task>
+    <task id="LOCAL-00001" summary="init Push">
+      <option name="closed" value="true" />
+      <created>1742703765620</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1742703765620</updated>
+    </task>
+    <task id="LOCAL-00002" summary="init Push">
+      <option name="closed" value="true" />
+      <created>1742703974474</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1742703974474</updated>
+    </task>
+    <task id="LOCAL-00003" summary="hooked into dockersocket&#10;checks env vars&#10;gens two tokens for each noona docker&#10;perms checks and makes network&#10;makes folder tree (i think?)&#10;checks if dockers are already there if! then download em&#10;&#10;download bar and other qol w/ logs">
+      <option name="closed" value="true" />
+      <created>1742727568644</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1742727568644</updated>
+    </task>
+    <task id="LOCAL-00004" summary="hooked into dockersocket&#10;checks env vars&#10;gens two tokens for each noona docker&#10;perms checks and makes network&#10;makes folder tree (i think?)&#10;checks if dockers are already there if! then download em&#10;&#10;download bar and other qol w/ logs">
+      <option name="closed" value="true" />
+      <created>1742727677459</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1742727677459</updated>
+    </task>
+    <task id="LOCAL-00005" summary="uuuuuhhh dont look XD">
+      <option name="closed" value="true" />
+      <created>1742773063934</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1742773063934</updated>
+    </task>
+    <task id="LOCAL-00006" summary="oooh i suck at commits">
+      <option name="closed" value="true" />
+      <created>1742825949646</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1742825949646</updated>
+    </task>
+    <task id="LOCAL-00007" summary="DOCKER PULL COMPLETE!">
+      <option name="closed" value="true" />
+      <created>1742829141682</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1742829141682</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="init Push" />
+    <MESSAGE value="hooked into dockersocket&#10;checks env vars&#10;gens two tokens for each noona docker&#10;perms checks and makes network&#10;makes folder tree (i think?)&#10;checks if dockers are already there if! then download em&#10;&#10;download bar and other qol w/ logs" />
+    <MESSAGE value="uuuuuhhh dont look XD" />
+    <MESSAGE value="oooh i suck at commits" />
+    <MESSAGE value="DOCKER PULL COMPLETE!" />
+    <option name="LAST_COMMIT_MESSAGE" value="DOCKER PULL COMPLETE!" />
+  </component>
+</project>

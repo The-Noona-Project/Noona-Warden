@@ -62,7 +62,15 @@ export function printStep(text) {
     console.log(`${timestamp()} ${chalk.yellow('⚙')} ${text}`);
 }
 
-// Updated Progress Bar for your desired look
+// Updated debug function: only print if NODE_ENV is "development"
+export function printDebug(text) {
+    const env = process.env.NODE_ENV ? process.env.NODE_ENV.trim().toLowerCase() : '';
+    if (env !== 'development') {
+        return;
+    }
+    console.log(`${timestamp()} ${chalk.magenta('DEBUG:')} ${text} ${chalk.gray('[NODE_ENV: development]')}`);
+}
+
 export function printProgressBar(label, percent, extraInfo = '') {
     const width = 20;
     const filledLength = Math.round((percent / 100) * width);
@@ -78,8 +86,7 @@ export function printBanner(label = 'Noona') {
  _     _  ___   ___  ____  _____ 
 | |   | |/ _ \\ / _ \\|  _ \\(____ |
 | |   | | |_| | |_| | | | / ___ |
-|_|   |_|\\___/ \\___/|_| |_|\\_____|
-                                
+|_|   |_|\\___/ \\___/|_| |_|\\_____|                                
 `;
     banner.trim().split('\n').forEach(line => {
         console.log(`${timestamp()} ${chalk.cyanBright(line)}`);
@@ -89,11 +96,6 @@ export function printBanner(label = 'Noona') {
     printDivider();
 }
 
-export function printDebug(text) {
-    console.log(`${timestamp()} ${chalk.magenta('DEBUG:')} ${text}`);
-}
-
-// ✅ New dedicated helper function to print the final summary after all images downloaded
 export function printDownloadSummary() {
     printDivider();
     printResult('✔ ✔ All dependency images downloaded');
