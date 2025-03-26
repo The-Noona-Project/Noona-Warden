@@ -10,7 +10,8 @@ import {
     printStep,
     printError,
     printNote,
-    printDivider
+    printDivider,
+    printDebug
 } from '../noona/logger/logUtils.mjs';
 
 import { containerPresets } from './containerPresets.mjs';
@@ -18,10 +19,9 @@ import { containerPresets } from './containerPresets.mjs';
 const docker = new Docker({ socketPath: '/var/run/docker.sock' });
 
 /**
- * Creates or starts a container using a preset definition.
- * Reuses the image if it's already available locally.
+ * Creates or starts a Docker container from a preset definition.
  *
- * @param {string} containerName - Name of the container to create or start
+ * @param {string} containerName - The name of the container (must match a key in containerPresets)
  */
 export async function createOrStartContainer(containerName) {
     const preset = containerPresets[containerName];
@@ -55,24 +55,39 @@ export async function createOrStartContainer(containerName) {
             img.RepoTags?.includes(imageName) || img.RepoTags?.includes(`${imageName}:latest`)
         );
 
-        if (isPulled) {
-            printNote(`✔ Reusing local image: ${imageName}`);
-        } else {
+        if (!isPulled) {
             printStep(`› Pulling image: ${imageName}`);
             await new Promise((resolve, reject) => {
                 docker.pull(imageName, (err, stream) => {
                     if (err) return reject(err);
-                    docker.modem.followProgress(
-                        stream,
-                        (err) => {
-                            if (err) return reject(err);
-                            printResult(`✔ Pulled image: ${imageName}`);
-                            resolve();
-                        },
-                        () => {} // optional progress handler
-                    );
+                    docker.modem.followProgress(stream, onFinished, onProgress);
+
+                    function onFinished(err) {
+                        if (err) return reject(err);
+                        printResult(`✔ Pulled image: ${imageName}`);
+                        resolve();
+                    }
+
+                    function onProgress() {}
                 });
             });
+        } else {
+            printNote(`✔ Reusing local image: ${imageName}`);
+        }
+
+        // 🧪 Validate and debug ENV vars
+        if (Array.isArray(preset.Env)) {
+            printAction(`🔐 Injecting environment variables into: ${containerName}`);
+            for (let i = 0; i < preset.Env.length; i++) {
+                const line = preset.Env[i];
+                const [key, value] = line.split('=');
+
+                if (!value || value.trim() === '') {
+                    printError(`❌ ENV var "${key}" has no value!`);
+                } else {
+                    printDebug(`✔ ${key} = ${value}`);
+                }
+            }
         }
 
         printAction(`› Creating container: ${containerName}`);

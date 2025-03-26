@@ -1,4 +1,4 @@
-// docker/containerManager.mjs
+// containerManager.mjs
 
 import dotenv from 'dotenv';
 dotenv.config({ path: '/noona/family/noona-warden/settings/config.env' });
@@ -8,18 +8,29 @@ import {
     printResult,
     printError,
     printNote,
-    printAction
+    printAction,
+    printDivider
 } from '../noona/logger/logUtils.mjs';
 
-const docker = new Docker({ socketPath: '/var/run/docker.sock' });
+import { createOrStartContainer } from './createOrStartContainer.mjs';
+import { waitForContainerHealth } from './healthChecker.mjs';
+
+// Core service dependencies for Vault and Portal
+const DEPEND_CONTAINERS = [
+    'noona-redis',
+    'noona-mongodb',
+    'noona-mariadb'
+];
 
 /**
  * Stops all running containers that start with 'noona-' except for 'noona-warden'.
  */
 export const stopRunningNoonaContainers = async () => {
+    const Docker = (await import('dockerode')).default;
+    const docker = new Docker({ socketPath: '/var/run/docker.sock' });
+
     try {
         const containers = await docker.listContainers({ all: true });
-
         const allNames = containers.map(c => c.Names[0]);
         printNote(`🧪 All containers: ${JSON.stringify(allNames)}`);
 
@@ -53,24 +64,31 @@ export const stopRunningNoonaContainers = async () => {
 };
 
 /**
- * Starts a single Docker container by name.
- *
- * @param {string} containerName - The name of the container.
- * @param {Object} [envVars] - Optional environment variables (not supported without recreate).
+ * Boots all required dependency containers and waits for them to become healthy.
  */
-export const startContainer = async (containerName, envVars = {}) => {
-    try {
-        const container = docker.getContainer(containerName);
-        const containerInfo = await container.inspect();
+export const startDependencies = async () => {
+    printDivider();
+    printAction('🚦 Starting Dependency Containers');
 
-        if (!containerInfo) {
-            throw new Error(`Container "${containerName}" not found`);
-        }
-
-        await container.start();
-        printResult(`✔ Started container: ${containerName}`);
-    } catch (err) {
-        printError(`❌ Failed to start container "${containerName}": ${err.message}`);
-        throw err;
+    for (const name of DEPEND_CONTAINERS) {
+        await createOrStartContainer(name);
     }
+
+    printDivider();
+    printAction('⏳ Waiting for Dependencies to become Healthy');
+
+    for (const name of DEPEND_CONTAINERS) {
+        await waitForContainerHealth(name);
+    }
+
+    printResult('✔ All dependencies are up and healthy');
+    printDivider();
+};
+
+/**
+ * Starts a single container by name and waits for it to become healthy.
+ */
+export const startContainer = async (containerName) => {
+    await createOrStartContainer(containerName);
+    await waitForContainerHealth(containerName);
 };

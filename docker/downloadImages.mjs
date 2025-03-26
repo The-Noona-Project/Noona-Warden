@@ -9,7 +9,7 @@ import {
     printDivider,
     printError,
     printNote,
-    printDownloadSummary, // New summary function
+    printDownloadSummary,
     printResult
 } from '../noona/logger/logUtils.mjs';
 import { containerPresets } from './containerPresets.mjs';
@@ -33,14 +33,29 @@ async function imageExistsLocally(imageName) {
 
 /**
  * Pulls all required dependency images and displays download status.
+ * Only pulls images for containers active in Warden scope.
  */
 export async function pullDependencyImages() {
     printDivider();
     printSubHeader('📦 Downloading Docker Images');
     printDivider();
 
+    // Include only containers needed by Warden
+    const wardenContainers = [
+        'noona-redis',
+        'noona-mongodb',
+        'noona-mariadb',
+        'noona-vault',
+        'noona-portal'
+    ];
+
     const uniqueImages = [
-        ...new Set(Object.values(containerPresets).map(p => p.Image))
+        ...new Set(
+            wardenContainers
+                .map(name => containerPresets[name])
+                .filter(Boolean)
+                .map(preset => preset.Image)
+        )
     ];
 
     for (const imageName of uniqueImages) {
@@ -58,7 +73,8 @@ export async function pullDependencyImages() {
                 continue;
             }
 
-            await handlePullProgress(docker, await docker.pull(imageName), imageName);
+            const pullStream = await docker.pull(imageName);
+            await handlePullProgress(docker, pullStream, imageName);
 
         } catch (err) {
             printError(`❌ Failed to pull ${imageName}: ${err.message}`);
@@ -66,5 +82,5 @@ export async function pullDependencyImages() {
         }
     }
 
-    printDownloadSummary(); // Clear, concise summary after all images are downloaded
+    printDownloadSummary();
 }

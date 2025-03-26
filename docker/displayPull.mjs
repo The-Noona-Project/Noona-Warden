@@ -27,45 +27,51 @@ export async function handlePullProgress(docker, stream, imageName) {
             function onProgress(event) {
                 const { id, progressDetail, status } = event;
 
-                if (!id || !progressDetail || !progressDetail.total) return;
+                if (!id) return;
 
                 if (!layers[id]) {
                     layers[id] = {
                         current: 0,
-                        total: progressDetail.total,
+                        total: progressDetail?.total || 0,
                         index: Object.keys(layers).length + 1
                     };
                     printed[id] = { zero: false, hundred: false };
-
-                    const readableSize = formatBytes(layers[id].total);
-                    printSubHeader(`❇️ Downloading ${ordinalSuffix(layers[id].index)} layer: ${id}`);
-                    printNote(`Size: ${readableSize}`);
-
-                    const bar = makeLoadBar(0);
-                    printResult(`🔻 ${bar} 0% of ${ordinalSuffix(layers[id].index)} layer ${id}`);
-                    printed[id].zero = true;
                 }
 
-                layers[id].current = progressDetail.current;
-
-                // Log at completion
-                if (progressDetail.current >= progressDetail.total && !printed[id].hundred) {
-                    const bar = makeLoadBar(100);
-                    printResult(`✔ ${bar} 100% of ${ordinalSuffix(layers[id].index)} layer ${id}`);
-                    printed[id].hundred = true;
-                }
-
-                // Log cached or existing layers
-                if (status.includes('Cached') || status.includes('Already exists')) {
+                // Handle cached or "already exists"
+                if (status?.includes('Cached') || status?.includes('Already exists')) {
                     if (!printed[id].hundred) {
                         const bar = makeLoadBar(100);
                         printResult(`✔ ${bar} 100% of ${ordinalSuffix(layers[id].index)} layer ${id} (cached)`);
                         printed[id].hundred = true;
                     }
+                    return;
+                }
+
+                if (!progressDetail?.total || !progressDetail?.current) return;
+
+                layers[id].current = progressDetail.current;
+                layers[id].total = progressDetail.total;
+
+                if (!printed[id].zero) {
+                    printSubHeader(`❇️ Downloading ${ordinalSuffix(layers[id].index)} layer: ${id}`);
+                    printNote(`Size: ${formatBytes(layers[id].total)}`);
+                    const bar = makeLoadBar(0);
+                    printResult(`🔻 ${bar} 0% of ${ordinalSuffix(layers[id].index)} layer ${id}`);
+                    printed[id].zero = true;
+                }
+
+                if (
+                    progressDetail.current >= progressDetail.total &&
+                    !printed[id].hundred
+                ) {
+                    const bar = makeLoadBar(100);
+                    printResult(`✔ ${bar} 100% of ${ordinalSuffix(layers[id].index)} layer ${id}`);
+                    printed[id].hundred = true;
                 }
             }
 
-            async function onFinished(err) {
+            function onFinished(err) {
                 if (err) {
                     printError(`❌ Failed to pull image: ${imageName}`);
                     return reject(err);
