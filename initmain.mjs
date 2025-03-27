@@ -55,8 +55,8 @@ printBanner('Noona');
                 'DISCORD_CLIENT_ID',
                 'DISCORD_TOKEN',
                 'KAVITA_API_KEY',
-                'KAVITA_SERVER_URL',
-                'VAULT_API_URL',
+                'KAVITA_URL',
+                'VAULT_URL',
                 'PORTAL_JWT_SECRET',
 
                 // ── Optional: Port Overrides ──
@@ -131,7 +131,7 @@ printBanner('Noona');
 
         // Start Noona-Portal
         printSection('🌙 Starting Noona-Portal');
-        await startContainer('noona-portal');
+        await createOrStartContainer('noona-portal');
         printResult('✔ Noona-Portal is running');
 
         // Boot Complete
