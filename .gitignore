@@ -37,3 +37,4 @@ build/
 *.swp
 *.tmp
 *.orig
+*.pem

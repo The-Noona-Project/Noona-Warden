@@ -19,13 +19,13 @@ export const containerPresets = {
         Image: 'redis:8.0-M04-alpine',
         name: 'noona-redis',
         ExposedPorts: { '6379/tcp': {} },
+        Volumes: {
+            '/data': {}
+        },
         HostConfig: {
             PortBindings: {
                 '6379/tcp': [{ HostPort: process.env.REDIS_PORT || '6379' }]
             },
-            Binds: [
-                `${FAMILY_MOUNT_BASE}/noona-vault/depends/noona-redis/files:/data`
-            ],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -49,13 +49,13 @@ export const containerPresets = {
             `MONGO_INITDB_ROOT_PASSWORD=${process.env.MONGO_PASSWORD}`,
             `MONGO_INITDB_DATABASE=${process.env.MONGO_DATABASE}`
         ],
+        Volumes: {
+            '/data/db': {}
+        },
         HostConfig: {
             PortBindings: {
                 '27017/tcp': [{ HostPort: process.env.MONGODB_PORT || '27017' }]
             },
-            Binds: [
-                `${FAMILY_MOUNT_BASE}/noona-vault/depends/noona-mongodb/files:/data/db`
-            ],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -84,13 +84,13 @@ export const containerPresets = {
             `MYSQL_USER=${process.env.MARIADB_USER}`,
             `MYSQL_PASSWORD=${process.env.MARIADB_PASSWORD}`
         ],
+        Volumes: {
+            '/var/lib/mysql': {}
+        },
         HostConfig: {
             PortBindings: {
                 '3306/tcp': [{ HostPort: process.env.MARIADB_PORT || '3306' }]
             },
-            Binds: [
-                `${FAMILY_MOUNT_BASE}/noona-vault/depends/noona-mariadb/files:/var/lib/mysql`
-            ],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -128,15 +128,15 @@ export const containerPresets = {
         ExposedPorts: {
             [`${process.env.VAULT_PORT}/tcp`]: {}
         },
+        Volumes: {
+            '/app/files': {}
+        },
         HostConfig: {
             PortBindings: {
                 [`${process.env.VAULT_PORT}/tcp`]: [
                     { HostPort: process.env.VAULT_PORT }
                 ]
             },
-            Binds: [
-                `${FAMILY_MOUNT_BASE}/noona-vault/files:/app/files`
-            ],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -195,8 +195,11 @@ export const containerPresets = {
             `NODE_ENV=${process.env.NODE_ENV}`,
             `PORTAL_PORT=${process.env.PORTAL_PORT}`
         ],
-            ExposedPorts: {
+        ExposedPorts: {
             [`${process.env.PORTAL_PORT}/tcp`]: {}
+        },
+        Volumes: {
+            '/app/files': {}
         },
         HostConfig: {
             PortBindings: {
@@ -204,9 +207,6 @@ export const containerPresets = {
                     { HostPort: process.env.PORTAL_PORT }
                 ]
             },
-            Binds: [
-                `${FAMILY_MOUNT_BASE}/noona-portal/files:/app/files`
-            ],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
