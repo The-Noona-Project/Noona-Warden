@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Refactor Docker container management and dependency workflows&#10;&#10;Enhanced container management with health checks and dependency startup logic. Updated image versions, added environment variable validation, and improved initialization scripts with dynamic `.env` loading. Dependencies are now managed with clearer separation for Vault and Portal services.">
+    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Refactor Docker workflows and enhance environment management&#10;&#10;Refactored container management with health checks and improved dependency startup logic. Updated `config.env` with detailed settings, streamlined Dockfile configurations, and introduced dynamic JWT key handling. Improved separation and initialization for Vault and Portal services.">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_22_2025_9_26_PM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_22_2025_9_26_PM__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/containerPresets.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/containerPresets.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/family/noona-warden/settings/config.env.template" beforeDir="false" afterPath="$PROJECT_DIR$/family/noona-warden/settings/config.env.template" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/initmain.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/initmain.mjs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,6 +78,12 @@
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;discord-application&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mongo&quot;,
+      &quot;redis&quot;
+    ]
   }
 }</component>
   <component name="RecentsManager">
@@ -238,6 +243,21 @@
       <workItem from="1743088615068" duration="499000" />
       <workItem from="1743089231996" duration="392000" />
       <workItem from="1743089714786" duration="214000" />
+      <workItem from="1743089940071" duration="40000" />
+      <workItem from="1743090676083" duration="924000" />
+      <workItem from="1743091846012" duration="184000" />
+      <workItem from="1743093506134" duration="154000" />
+      <workItem from="1743093829437" duration="1281000" />
+      <workItem from="1743095454040" duration="264000" />
+      <workItem from="1743096791255" duration="17000" />
+      <workItem from="1743096818133" duration="1117000" />
+      <workItem from="1743098484251" duration="859000" />
+      <workItem from="1743099359348" duration="12000" />
+      <workItem from="1743358369069" duration="325000" />
+      <workItem from="1743359906647" duration="8000" />
+      <workItem from="1743359922636" duration="470000" />
+      <workItem from="1743361352433" duration="1251000" />
+      <workItem from="1743363150213" duration="2481000" />
     </task>
     <task id="LOCAL-00001" summary="init Push">
       <option name="closed" value="true" />
@@ -335,7 +355,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742964451128</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Refactor Docker workflows and enhance environment management&#10;&#10;Refactored container management with health checks and improved dependency startup logic. Updated `config.env` with detailed settings, streamlined Dockfile configurations, and introduced dynamic JWT key handling. Improved separation and initialization for Vault and Portal services.">
+      <option name="closed" value="true" />
+      <created>1743089968558</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1743089968558</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -365,7 +393,8 @@
     <MESSAGE value="Updated buildTree.mjs to work as an absolute path and updated logic" />
     <MESSAGE value="moved .env to settting folder and named `config.env`" />
     <MESSAGE value="Refactor Docker container management and dependency workflows&#10;&#10;Enhanced container management with health checks and dependency startup logic. Updated image versions, added environment variable validation, and improved initialization scripts with dynamic `.env` loading. Dependencies are now managed with clearer separation for Vault and Portal services." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor Docker container management and dependency workflows&#10;&#10;Enhanced container management with health checks and dependency startup logic. Updated image versions, added environment variable validation, and improved initialization scripts with dynamic `.env` loading. Dependencies are now managed with clearer separation for Vault and Portal services." />
+    <MESSAGE value="Refactor Docker workflows and enhance environment management&#10;&#10;Refactored container management with health checks and improved dependency startup logic. Updated `config.env` with detailed settings, streamlined Dockfile configurations, and introduced dynamic JWT key handling. Improved separation and initialization for Vault and Portal services." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor Docker workflows and enhance environment management&#10;&#10;Refactored container management with health checks and improved dependency startup logic. Updated `config.env` with detailed settings, streamlined Dockfile configurations, and introduced dynamic JWT key handling. Improved separation and initialization for Vault and Portal services." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

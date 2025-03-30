@@ -1,12 +1,13 @@
-// containerPresets.mjs
+// /noona/containerPresets.mjs
 
 import fs from 'fs';
 import dotenv from 'dotenv';
 dotenv.config({ path: '/noona/family/noona-warden/settings/config.env' });
 
+// The family mount base where host folders reside
 const FAMILY_MOUNT_BASE = '/noona/family';
 
-// Load private JWT key inline if path exists
+// Load the private JWT key from the configured path (if available)
 let jwtPrivateKey = process.env.JWT_PRIVATE_KEY;
 const jwtPrivateKeyPath = process.env.JWT_PRIVATE_KEY_PATH;
 if (!jwtPrivateKey && jwtPrivateKeyPath && fs.existsSync(jwtPrivateKeyPath)) {
@@ -20,7 +21,7 @@ export const containerPresets = {
         name: 'noona-redis',
         ExposedPorts: { '6379/tcp': {} },
         Volumes: {
-            '/data': {}
+            '/data': {} // use Docker-managed volume for persistence
         },
         HostConfig: {
             PortBindings: {
@@ -29,7 +30,10 @@ export const containerPresets = {
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
-            EndpointsConfig: { 'noona-network': {} }
+            EndpointsConfig: {
+                'bridge': {},
+                'noona-network': {}
+            }
         },
         Healthcheck: {
             Test: ['CMD', 'redis-cli', 'ping'],
@@ -48,9 +52,10 @@ export const containerPresets = {
             `MONGO_INITDB_ROOT_USERNAME=${process.env.MONGO_USER}`,
             `MONGO_INITDB_ROOT_PASSWORD=${process.env.MONGO_PASSWORD}`,
             `MONGO_INITDB_DATABASE=${process.env.MONGO_DATABASE}`
+            // Note: The official mongo image auto-creates the root user and database
         ],
         Volumes: {
-            '/data/db': {}
+            '/data/db': {} // Docker volume for MongoDB data
         },
         HostConfig: {
             PortBindings: {
@@ -59,7 +64,10 @@ export const containerPresets = {
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
-            EndpointsConfig: { 'noona-network': {} }
+            EndpointsConfig: {
+                'bridge': {},
+                'noona-network': {}
+            }
         },
         Healthcheck: {
             Test: [
@@ -85,7 +93,7 @@ export const containerPresets = {
             `MYSQL_PASSWORD=${process.env.MARIADB_PASSWORD}`
         ],
         Volumes: {
-            '/var/lib/mysql': {}
+            '/var/lib/mysql': {} // Docker volume for MariaDB data
         },
         HostConfig: {
             PortBindings: {
@@ -94,7 +102,10 @@ export const containerPresets = {
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
-            EndpointsConfig: { 'noona-network': {} }
+            EndpointsConfig: {
+                'bridge': {},
+                'noona-network': {}
+            }
         },
         Healthcheck: {
             Test: [
@@ -115,7 +126,7 @@ export const containerPresets = {
         Env: [
             `NODE_ENV=${process.env.NODE_ENV}`,
             `PORT=${process.env.VAULT_PORT}`,
-            `MONGO_URL=${process.env.MONGO_URL}`,
+            `MONGO_URL=${process.env.MONGO_URL}`, // Full URL with credentials from config.env
             `REDIS_URL=${process.env.REDIS_URL}`,
             `MARIADB_USER=${process.env.MARIADB_USER}`,
             `MARIADB_PASSWORD=${process.env.MARIADB_PASSWORD}`,
@@ -128,15 +139,16 @@ export const containerPresets = {
         ExposedPorts: {
             [`${process.env.VAULT_PORT}/tcp`]: {}
         },
-        Volumes: {
-            '/app/files': {}
-        },
+        // Use a bind mount from the family folder for Vault data
         HostConfig: {
             PortBindings: {
                 [`${process.env.VAULT_PORT}/tcp`]: [
                     { HostPort: process.env.VAULT_PORT }
                 ]
             },
+            Binds: [
+                `${FAMILY_MOUNT_BASE}/noona-vault/files:/app/files`
+            ],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
@@ -146,7 +158,7 @@ export const containerPresets = {
             }
         },
         Healthcheck: {
-            Test: ['CMD', 'curl', '-f', `http://localhost:${process.env.VAULT_PORT || '3120'}/v1/system/health`],
+            Test: ['CMD-SHELL', 'pgrep -f initmain.mjs || exit 1'],
             Interval: 10e9,
             Timeout: 5e9,
             Retries: 5,
@@ -163,34 +175,27 @@ export const containerPresets = {
             `KAVITA_URL=${process.env.KAVITA_URL}`,
             `KAVITA_API_KEY=${process.env.KAVITA_API_KEY}`,
             `KAVITA_LIBRARY_IDS=${process.env.KAVITA_LIBRARY_IDS}`,
-
             // 🤖 Discord Bot
             `DISCORD_TOKEN=${process.env.DISCORD_TOKEN}`,
             `DISCORD_CLIENT_ID=${process.env.DISCORD_CLIENT_ID}`,
             `REQUIRED_GUILD_ID=${process.env.REQUIRED_GUILD_ID}`,
-
             // 🎭 Role Requirements
             `REQUIRED_ROLE_ADMIN=${process.env.REQUIRED_ROLE_ADMIN}`,
             `REQUIRED_ROLE_MOD=${process.env.REQUIRED_ROLE_MOD}`,
             `REQUIRED_ROLE_USER=${process.env.REQUIRED_ROLE_USER}`,
-
             // 🔔 Notifications
             `NOTIFICATION_CHANNEL_ID=${process.env.NOTIFICATION_CHANNEL_ID}`,
             `CHECK_INTERVAL_HOURS=${process.env.CHECK_INTERVAL_HOURS}`,
             `KAVITA_LOOKBACK_HOURS=${process.env.KAVITA_LOOKBACK_HOURS}`,
-
             // 🧠 Vault Integration
             `VAULT_URL=${process.env.VAULT_URL}`,
             `VAULT_JWT=${process.env.VAULT_JWT}`,
-
             // 🔑 Redis
             `REDIS_URL=redis://noona-redis:6379`,
-
             // 🧾 Optional Add-ons
             `JWT_PRIVATE_KEY=${process.env.PORTAL_JWT_SECRET || ''}`,
             `JWT_PUBLIC_KEY=${process.env.JWT_PUBLIC_KEY || ''}`,
             `PROJECT_NAME=${process.env.PROJECT_NAME || 'The Noona Project'}`,
-
             // General Node settings
             `NODE_ENV=${process.env.NODE_ENV}`,
             `PORTAL_PORT=${process.env.PORTAL_PORT}`
@@ -198,15 +203,16 @@ export const containerPresets = {
         ExposedPorts: {
             [`${process.env.PORTAL_PORT}/tcp`]: {}
         },
-        Volumes: {
-            '/app/files': {}
-        },
+        // Use a bind mount from the family folder for Portal data
         HostConfig: {
             PortBindings: {
                 [`${process.env.PORTAL_PORT}/tcp`]: [
                     { HostPort: process.env.PORTAL_PORT }
                 ]
             },
+            Binds: [
+                `${FAMILY_MOUNT_BASE}/noona-portal/files:/app/files`
+            ],
             RestartPolicy: { Name: 'unless-stopped' }
         },
         NetworkingConfig: {
