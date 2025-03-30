@@ -49,10 +49,11 @@ export const containerPresets = {
         name: 'noona-mongodb',
         ExposedPorts: { '27017/tcp': {} },
         Env: [
-            `MONGO_INITDB_ROOT_USERNAME=${process.env.MONGO_USER}`,
-            `MONGO_INITDB_ROOT_PASSWORD=${process.env.MONGO_PASSWORD}`,
-            `MONGO_INITDB_DATABASE=${process.env.MONGO_DATABASE}`
-            // Note: The official mongo image auto-creates the root user and database
+            // Use dedicated init variables if available; otherwise fall back to MONGO_USER/MONGO_PASSWORD/MONGO_DATABASE.
+            `MONGO_INITDB_ROOT_USERNAME=${process.env.MONGO_INITDB_ROOT_USERNAME || process.env.MONGO_USER}`,
+            `MONGO_INITDB_ROOT_PASSWORD=${process.env.MONGO_INITDB_ROOT_PASSWORD || process.env.MONGO_PASSWORD}`,
+            `MONGO_INITDB_DATABASE=${process.env.MONGO_INITDB_DATABASE || process.env.MONGO_DATABASE}`
+            // The official Mongo image auto-creates the root user and database on first run.
         ],
         Volumes: {
             '/data/db': {} // Docker volume for MongoDB data
