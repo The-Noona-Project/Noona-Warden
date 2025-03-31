@@ -1,17 +1,22 @@
 // /noona/containerPresets.mjs
 
 import fs from 'fs';
+import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config({ path: '/noona/family/noona-warden/settings/config.env' });
 
 // The family mount base where host folders reside
 const FAMILY_MOUNT_BASE = '/noona/family';
 
-// Load the private JWT key from the configured path (if available)
-let jwtPrivateKey = process.env.JWT_PRIVATE_KEY;
-const jwtPrivateKeyPath = process.env.JWT_PRIVATE_KEY_PATH;
-if (!jwtPrivateKey && jwtPrivateKeyPath && fs.existsSync(jwtPrivateKeyPath)) {
+// 🔐 Load the private JWT key from the Noona-Warden key folder
+const jwtPrivateKeyPath = '/noona/family/noona-warden/files/keys/public.pem';
+let jwtPrivateKey = '';
+
+if (fs.existsSync(jwtPrivateKeyPath)) {
     jwtPrivateKey = fs.readFileSync(jwtPrivateKeyPath, 'utf-8');
+    console.log('✅ Loaded JWT private key from:', jwtPrivateKeyPath);
+} else {
+    console.warn('⚠️ Private key file not found at:', jwtPrivateKeyPath);
 }
 
 export const containerPresets = {
@@ -172,44 +177,32 @@ export const containerPresets = {
         Image: 'captainpax/noona-portal:latest',
         name: 'noona-portal',
         Env: [
-            // 🌐 Kavita API
             `KAVITA_URL=${process.env.KAVITA_URL}`,
             `KAVITA_API_KEY=${process.env.KAVITA_API_KEY}`,
             `KAVITA_LIBRARY_IDS=${process.env.KAVITA_LIBRARY_IDS}`,
-            // 🤖 Discord Bot
             `DISCORD_TOKEN=${process.env.DISCORD_TOKEN}`,
             `DISCORD_CLIENT_ID=${process.env.DISCORD_CLIENT_ID}`,
             `REQUIRED_GUILD_ID=${process.env.REQUIRED_GUILD_ID}`,
-            // 🎭 Role Requirements
             `REQUIRED_ROLE_ADMIN=${process.env.REQUIRED_ROLE_ADMIN}`,
             `REQUIRED_ROLE_MOD=${process.env.REQUIRED_ROLE_MOD}`,
             `REQUIRED_ROLE_USER=${process.env.REQUIRED_ROLE_USER}`,
-            // 🔔 Notifications
             `NOTIFICATION_CHANNEL_ID=${process.env.NOTIFICATION_CHANNEL_ID}`,
             `CHECK_INTERVAL_HOURS=${process.env.CHECK_INTERVAL_HOURS}`,
             `KAVITA_LOOKBACK_HOURS=${process.env.KAVITA_LOOKBACK_HOURS}`,
-            // 🧠 Vault Integration
             `VAULT_URL=${process.env.VAULT_URL}`,
             `VAULT_JWT=${process.env.VAULT_JWT}`,
-            // 🔑 Redis
-            `REDIS_URL=redis://noona-redis:6379`,
-            // 🧾 Optional Add-ons
-            `JWT_PRIVATE_KEY=${process.env.PORTAL_JWT_SECRET || ''}`,
-            `JWT_PUBLIC_KEY=${process.env.JWT_PUBLIC_KEY || ''}`,
+            `REDIS_URL=${process.env.REDIS_URL}`,
+            `JWT_PRIVATE_KEY=${jwtPrivateKey}`,
             `PROJECT_NAME=${process.env.PROJECT_NAME || 'The Noona Project'}`,
-            // General Node settings
             `NODE_ENV=${process.env.NODE_ENV}`,
             `PORTAL_PORT=${process.env.PORTAL_PORT}`
         ],
         ExposedPorts: {
             [`${process.env.PORTAL_PORT}/tcp`]: {}
         },
-        // Use a bind mount from the family folder for Portal data
         HostConfig: {
             PortBindings: {
-                [`${process.env.PORTAL_PORT}/tcp`]: [
-                    { HostPort: process.env.PORTAL_PORT }
-                ]
+                [`${process.env.PORTAL_PORT}/tcp`]: [{ HostPort: process.env.PORTAL_PORT }]
             },
             Binds: [
                 `${FAMILY_MOUNT_BASE}/noona-portal/files:/app/files`
