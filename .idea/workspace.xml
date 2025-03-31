@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Refactor Docker workflows and update configuration templates.&#10;&#10;Improved container management with additional health checks, enhanced network settings, and clarified volume bindings. Simplified `config.env` template by consolidating reusable secrets and restructuring sections for clarity. Updated initialization logic for better integration with Vault and Portal services.">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Refactor Docker workflows and update configuration templates&#10;&#10;Improved container management with added health checks, enhanced network settings, and updated volume bindings. Consolidated reusable secrets in `config.env` and shifted to `MONGO_INITDB` variables for better clarity. Modified initialization logic for streamlined integration with Vault and Portal services.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,39 +57,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml.noona-warden: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.initmain.mjs.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/The-Noona-Project/Noona-Warden&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;discord-application&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Docker.Dockerfile.executor": "Run",
+    "Docker.docker-compose.yml.noona-warden: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
+    "Node.js.initmain.mjs.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "2.0.0",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "F:/The-Noona-Project/Noona-Warden/family/noona-warden/settings",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "discord-application",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mongo&quot;,
-      &quot;redis&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mongo",
+      "redis",
+      "mariadb"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\The-Noona-Project\Noona-Warden\family\noona-warden\settings" />
       <recent name="F:\The-Noona-Project\Noona-Warden" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -100,17 +102,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Docker.Dockerfile">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="Noona-Warden" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="Noona-Warden" />
-      <option name="filePath" />
-      <method v="2" />
-    </configuration>
     <configuration name="initmain.mjs" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/initmain.mjs" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
@@ -264,6 +255,10 @@
       <workItem from="1743365686588" duration="188000" />
       <workItem from="1743365999718" duration="213000" />
       <workItem from="1743366975286" duration="2889000" />
+      <workItem from="1743372936042" duration="674000" />
+      <workItem from="1743374204892" duration="1251000" />
+      <workItem from="1743379540326" duration="1938000" />
+      <workItem from="1743381497476" duration="533000" />
     </task>
     <task id="LOCAL-00001" summary="init Push">
       <option name="closed" value="true" />
@@ -377,7 +372,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743365759992</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Refactor Docker workflows and update configuration templates&#10;&#10;Improved container management with added health checks, enhanced network settings, and updated volume bindings. Consolidated reusable secrets in `config.env` and shifted to `MONGO_INITDB` variables for better clarity. Modified initialization logic for streamlined integration with Vault and Portal services.">
+      <option name="closed" value="true" />
+      <created>1743373049211</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1743373049211</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -409,7 +412,8 @@
     <MESSAGE value="Refactor Docker container management and dependency workflows&#10;&#10;Enhanced container management with health checks and dependency startup logic. Updated image versions, added environment variable validation, and improved initialization scripts with dynamic `.env` loading. Dependencies are now managed with clearer separation for Vault and Portal services." />
     <MESSAGE value="Refactor Docker workflows and enhance environment management&#10;&#10;Refactored container management with health checks and improved dependency startup logic. Updated `config.env` with detailed settings, streamlined Dockfile configurations, and introduced dynamic JWT key handling. Improved separation and initialization for Vault and Portal services." />
     <MESSAGE value="Refactor Docker workflows and update configuration templates.&#10;&#10;Improved container management with additional health checks, enhanced network settings, and clarified volume bindings. Simplified `config.env` template by consolidating reusable secrets and restructuring sections for clarity. Updated initialization logic for better integration with Vault and Portal services." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor Docker workflows and update configuration templates.&#10;&#10;Improved container management with additional health checks, enhanced network settings, and clarified volume bindings. Simplified `config.env` template by consolidating reusable secrets and restructuring sections for clarity. Updated initialization logic for better integration with Vault and Portal services." />
+    <MESSAGE value="Refactor Docker workflows and update configuration templates&#10;&#10;Improved container management with added health checks, enhanced network settings, and updated volume bindings. Consolidated reusable secrets in `config.env` and shifted to `MONGO_INITDB` variables for better clarity. Modified initialization logic for streamlined integration with Vault and Portal services." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor Docker workflows and update configuration templates&#10;&#10;Improved container management with added health checks, enhanced network settings, and updated volume bindings. Consolidated reusable secrets in `config.env` and shifted to `MONGO_INITDB` variables for better clarity. Modified initialization logic for streamlined integration with Vault and Portal services." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
