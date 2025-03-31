@@ -14,6 +14,7 @@ import {
 import { validateEnv } from './noona/logger/validateEnv.mjs';
 import { generateKeys } from './noona/jwt/generateKeys.mjs';
 import { sendPublicKeyToRedis } from './noona/jwt/sendToRedis.mjs';
+import { createAndStoreServiceToken } from './noona/jwt/createServiceToken.mjs';
 import {
     stopRunningNoonaContainers,
     startDependencies,
@@ -128,6 +129,11 @@ printBanner('Noona');
         printSection('🛰️ Sending Public JWT Key to Redis');
         await sendPublicKeyToRedis();
         printResult('✔ Public JWT Key shared with Redis');
+
+        // Generate and store service token for Noona-Portal
+        printSection('🔑 Generating Service Token for Noona-Portal');
+        await createAndStoreServiceToken('noona-portal');
+        printResult('✔ Service token generated and stored in Redis');
 
         // Start Noona-Portal
         printSection('🌙 Starting Noona-Portal');
