@@ -21,9 +21,19 @@ import fs from 'fs';
 const docker = new Docker({ socketPath: '/var/run/docker.sock' });
 
 /**
- * Creates or starts a Docker container from a preset definition.
+ * Creates or starts a Docker container based on a preset configuration.
  *
- * @param {string} containerName - The name of the container (must match a key in containerPresets)
+ * This function retrieves the container preset associated with the provided container name,
+ * checks for any existing container instance, and either starts it if already running or creates
+ * a new one if it does not exist. For containers that require a JWT update (e.g., "noona-portal" or
+ * "noona-vault"), a stopped container is removed to ensure that the fresh JWT private key is applied.
+ * If the required Docker image is not present locally, the image is pulled from the remote repository.
+ * The function also reads a private key from a predetermined file path and updates the container's
+ * environment variables accordingly, while validating that all environment variables have non-empty values.
+ *
+ * @param {string} containerName - The name of the container. Must correspond to a preset configuration.
+ *
+ * @throws {Error} When removal of an existing stopped container or reading/updating the private key fails.
  */
 export async function createOrStartContainer(containerName) {
     const preset = containerPresets[containerName];
