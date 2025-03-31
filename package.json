@@ -21,6 +21,7 @@
     "dotenv": "^16.4.7",
     "figlet": "^1.8.0",
     "jsdocs": "^0.0.1",
+    "jsonwebtoken": "^9.0.2",
     "redis": "^4.7.0",
     "table": "^6.9.0"
   }

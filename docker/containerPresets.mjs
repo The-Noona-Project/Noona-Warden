@@ -9,7 +9,7 @@ dotenv.config({ path: '/noona/family/noona-warden/settings/config.env' });
 const FAMILY_MOUNT_BASE = '/noona/family';
 
 // 🔐 Load the private JWT key from the Noona-Warden key folder
-const jwtPrivateKeyPath = '/noona/family/noona-warden/files/keys/public.pem';
+const jwtPrivateKeyPath = '/noona/family/noona-warden/files/keys/private.pem';
 let jwtPrivateKey = '';
 
 if (fs.existsSync(jwtPrivateKeyPath)) {
