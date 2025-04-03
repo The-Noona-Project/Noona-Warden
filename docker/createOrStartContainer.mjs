@@ -15,13 +15,25 @@ import {
 } from '../noona/logger/logUtils.mjs';
 
 import { containerPresets } from './containerPresets.mjs';
+import path from 'path';
+import fs from 'fs';
 
 const docker = new Docker({ socketPath: '/var/run/docker.sock' });
 
 /**
- * Creates or starts a Docker container from a preset definition.
+ * Creates or starts a Docker container based on a preset configuration.
  *
- * @param {string} containerName - The name of the container (must match a key in containerPresets)
+ * This function retrieves the container preset associated with the provided container name,
+ * checks for any existing container instance, and either starts it if already running or creates
+ * a new one if it does not exist. For containers that require a JWT update (e.g., "noona-portal" or
+ * "noona-vault"), a stopped container is removed to ensure that the fresh JWT private key is applied.
+ * If the required Docker image is not present locally, the image is pulled from the remote repository.
+ * The function also reads a private key from a predetermined file path and updates the container's
+ * environment variables accordingly, while validating that all environment variables have non-empty values.
+ *
+ * @param {string} containerName - The name of the container. Must correspond to a preset configuration.
+ *
+ * @throws {Error} When removal of an existing stopped container or reading/updating the private key fails.
  */
 export async function createOrStartContainer(containerName) {
     const preset = containerPresets[containerName];
@@ -39,15 +51,28 @@ export async function createOrStartContainer(containerName) {
         if (existing) {
             const container = docker.getContainer(existing.Id);
             const info = await container.inspect();
+            const requiresJwtUpdate = (containerName === 'noona-portal' || containerName === 'noona-vault');
 
             if (!info.State.Running) {
-                printAction(`› Starting existing container: ${containerName}`);
-                await container.start();
-                printResult(`✔ Started container: ${containerName}`);
+                if (requiresJwtUpdate) {
+                    printAction(`🔌 Removing stopped container ${containerName} to apply updated JWT key...`);
+                    try {
+                        await container.remove({ force: true });
+                    } catch (removeErr) {
+                        printError(`❌ Failed to remove stopped container ${containerName}: ${removeErr.message}`);
+                        throw removeErr;
+                    }
+                    printResult(`✔ Removed stopped container: ${containerName}`);
+                } else {
+                    printAction(`› Starting existing container: ${containerName}`);
+                    await container.start();
+                    printResult(`✔ Started container: ${containerName}`);
+                    return;
+                }
             } else {
                 printNote(`✔ Already running: ${containerName}`);
+                return;
             }
-            return;
         }
 
         const images = await docker.listImages();
@@ -73,6 +98,38 @@ export async function createOrStartContainer(containerName) {
             });
         } else {
             printNote(`✔ Reusing local image: ${imageName}`);
+        }
+
+        const privateKeyPath = path.join('/noona/family/noona-warden/files/keys', 'private.pem');
+        let currentPrivateKey = '';
+        try {
+            if (fs.existsSync(privateKeyPath)) {
+                currentPrivateKey = fs.readFileSync(privateKeyPath, 'utf-8');
+                printDebug(`[createContainer] Read current private key from: ${privateKeyPath}`);
+            } else {
+                printError(`[createContainer] Cannot find private key at ${privateKeyPath} before container creation!`);
+                throw new Error('Private key missing before container creation');
+            }
+
+            if (preset.Env && Array.isArray(preset.Env)) {
+                const envIndex = preset.Env.findIndex(envVar => envVar.startsWith('JWT_PRIVATE_KEY='));
+                if (envIndex !== -1) {
+                    preset.Env[envIndex] = `JWT_PRIVATE_KEY=${currentPrivateKey}`;
+                    printDebug(`[createContainer] Updated preset.Env with current private key for ${containerName}.`);
+                } else {
+                    if (containerName === 'noona-portal' || containerName === 'noona-vault') {
+                        printError(`[createContainer] JWT_PRIVATE_KEY not found in preset.Env array for ${containerName}!`);
+                        preset.Env.push(`JWT_PRIVATE_KEY=${currentPrivateKey}`);
+                    }
+                }
+            } else {
+                if (containerName === 'noona-portal' || containerName === 'noona-vault') {
+                     printError(`[createContainer] preset.Env array is missing for ${containerName}! Cannot inject private key.`);
+                }
+            }
+        } catch (readErr) {
+            printError(`[createContainer] Failed to read or update private key before creating ${containerName}: ${readErr.message}`);
+            throw readErr;
         }
 
         // 🧪 Validate and debug ENV vars
