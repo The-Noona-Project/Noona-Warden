@@ -1,11 +1,11 @@
-// docker/buildNetwork.mjs
+// docker/builld/buildNetwork.mjs
 
 import Docker from 'dockerode';
 import {
     printResult,
     printError,
     printDebug
-} from '../noona/logger/logUtils.mjs';
+} from '../../noona/logger/logUtils.mjs';
 
 const docker = new Docker({ socketPath: '/var/run/docker.sock' });
 

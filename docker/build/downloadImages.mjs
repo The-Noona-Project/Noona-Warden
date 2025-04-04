@@ -1,8 +1,7 @@
-// docker/downloadImages.mjs
-
+// docker/build/downloadImages.mjs
 import Docker from 'dockerode';
 import { handlePullProgress } from './displayPull.mjs';
-import { getImageSize, formatBytes } from './getMetadata.mjs';
+import { getImageSize, formatBytes } from '../getMetadata.mjs';
 import {
     printSubHeader,
     printSpacer,
@@ -11,20 +10,21 @@ import {
     printNote,
     printDownloadSummary,
     printResult
-} from '../noona/logger/logUtils.mjs';
-import { containerPresets } from './containerPresets.mjs';
+} from '../../noona/logger/logUtils.mjs';
+import { containerPresets } from '../containerPresets.mjs';
 
 const docker = new Docker({ socketPath: '/var/run/docker.sock' });
 
 /**
- * Checks if an image already exists locally
+ * Checks if an image already exists locally.
  * @param {string} imageName
  * @returns {Promise<boolean>}
  */
 async function imageExistsLocally(imageName) {
     try {
         const images = await docker.listImages();
-        return images.some(img => img.RepoTags?.includes(imageName));
+        // Check if any image's RepoTags include the given image name.
+        return images.some(img => img.RepoTags && img.RepoTags.includes(imageName));
     } catch (err) {
         printError(`❌ Failed to check local images: ${err.message}`);
         return false;
@@ -40,7 +40,7 @@ export async function pullDependencyImages() {
     printSubHeader('📦 Downloading Docker Images');
     printDivider();
 
-    // Include only containers needed by Warden
+    // Define only the containers needed by Warden.
     const wardenContainers = [
         'noona-redis',
         'noona-mongodb',
@@ -49,6 +49,7 @@ export async function pullDependencyImages() {
         'noona-portal'
     ];
 
+    // Get unique image names from container presets.
     const uniqueImages = [
         ...new Set(
             wardenContainers
@@ -73,9 +74,13 @@ export async function pullDependencyImages() {
                 continue;
             }
 
+            printNote(`Pulling image: ${imageName}...`);
             const pullStream = await docker.pull(imageName);
             await handlePullProgress(docker, pullStream, imageName);
-
+            // Optionally log size after pull.
+            const size = await getImageSize(imageName);
+            printNote(`› › Downloaded Size: ${formatBytes(size)}`);
+            printDivider();
         } catch (err) {
             printError(`❌ Failed to pull ${imageName}: ${err.message}`);
             printDivider();

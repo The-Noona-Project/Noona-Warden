@@ -8,7 +8,7 @@ import {
     printWarning,
     printError,
     printDebug
-} from '../logger/logUtils.mjs';
+} from '../../logger/logUtils.mjs';
 
 /**
  * 🌱 Validates required and optional environment variables.

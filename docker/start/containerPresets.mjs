@@ -3,7 +3,6 @@
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-dotenv.config({ path: '/noona/family/noona-warden/settings/config.env' });
 
 // The family mount base where host folders reside
 const FAMILY_MOUNT_BASE = '/noona/family';

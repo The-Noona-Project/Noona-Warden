@@ -1,21 +1,26 @@
-// containerManager.mjs
-
-import dotenv from 'dotenv';
-dotenv.config({ path: '/noona/family/noona-warden/settings/config.env' });
-
+// docker/containerManager.mjs
 import Docker from 'dockerode';
 import {
     printResult,
     printError,
     printNote,
     printAction,
-    printDivider
+    printDivider,
+    printSection,
+    printDebug
 } from '../noona/logger/logUtils.mjs';
 
-import { createOrStartContainer } from './createOrStartContainer.mjs';
-import { waitForContainerHealth } from './healthChecker.mjs';
+// Import container lifecycle functions from our modular files:
+import { createContainer } from './start/createContainer.mjs';
+import { startContainer } from './start/startContainer.mjs';
+import { pullDependencyImages } from './build/downloadImages.mjs';
+import { ensureNetworkExists } from './build/buildNetwork.mjs';
+import updateContainer from './update/UpdateContainer.mjs';
+import checkForUpdate from './update/checkForUpdate.mjs';
 
-// Core service dependencies for Vault and Portal
+const docker = new Docker({ socketPath: '/var/run/docker.sock' });
+
+// Define the dependency containers for the stack.
 const DEPEND_CONTAINERS = [
     'noona-redis',
     'noona-mongodb',
@@ -23,29 +28,19 @@ const DEPEND_CONTAINERS = [
 ];
 
 /**
- * Stops all running containers that start with 'noona-' except for 'noona-warden'.
+ * Stops all running containers that start with "noona-" (except "noona-warden").
  */
-export const stopRunningNoonaContainers = async () => {
-    const Docker = (await import('dockerode')).default;
-    const docker = new Docker({ socketPath: '/var/run/docker.sock' });
-
+async function stopRunningNoonaContainers() {
     try {
         const containers = await docker.listContainers({ all: true });
-        const allNames = containers.map(c => c.Names[0]);
-        printNote(`🧪 All containers: ${JSON.stringify(allNames)}`);
-
-        const targets = containers.filter((c) => {
+        const targets = containers.filter(c => {
             const name = c.Names[0]?.replace(/^\//, '');
             return name.startsWith('noona-') && name !== 'noona-warden' && c.State === 'running';
         });
-
-        printNote(`🔍 Found ${targets.length} Noona container(s) to stop...`);
-
         if (targets.length === 0) {
             printResult('✔ No running Noona containers found');
             return;
         }
-
         for (const containerInfo of targets) {
             const containerName = containerInfo.Names[0]?.replace(/^\//, '');
             try {
@@ -61,34 +56,127 @@ export const stopRunningNoonaContainers = async () => {
         printError('❌ Error during container stop phase: ' + err.message);
         throw err;
     }
-};
+}
 
 /**
- * Boots all required dependency containers and waits for them to become healthy.
+ * Connects the current container ("warden") to required networks.
  */
-export const startDependencies = async () => {
-    printDivider();
-    printAction('🚦 Starting Dependency Containers');
-
-    for (const name of DEPEND_CONTAINERS) {
-        await createOrStartContainer(name);
+async function connectWardenToNetworks() {
+    const wardenContainerId = process.env.HOSTNAME;
+    const networksToConnect = ['bridge', 'noona-network'];
+    for (const net of networksToConnect) {
+        try {
+            const network = docker.getNetwork(net);
+            await network.connect({ Container: wardenContainerId });
+            printResult(`✔ Connected to network: ${net}`);
+        } catch (err) {
+            if (!err.message.includes('already exists')) {
+                printError(`❌ Failed to connect to network ${net}: ${err.message}`);
+            }
+        }
     }
-
-    printDivider();
-    printAction('⏳ Waiting for Dependencies to become Healthy');
-
-    for (const name of DEPEND_CONTAINERS) {
-        await waitForContainerHealth(name);
-    }
-
-    printResult('✔ All dependencies are up and healthy');
-    printDivider();
-};
+}
 
 /**
- * Starts a single container by name and waits for it to become healthy.
+ * Manages the initial start of the entire container stack.
  */
-export const startContainer = async (containerName) => {
-    await createOrStartContainer(containerName);
-    await waitForContainerHealth(containerName);
-};
+async function manageContainers() {
+    printDivider();
+    printSection('🐳 Starting Noona Container Management');
+
+    await checkDockerAccess();
+
+    // Stop currently running containers (except warden).
+    await stopRunningNoonaContainers();
+
+    // Ensure required Docker networks exist.
+    await ensureNetworkExists('bridge');
+    await ensureNetworkExists('noona-network');
+    printResult('✔ Docker networks ready');
+
+    // Connect Warden container to networks.
+    await connectWardenToNetworks();
+
+    // Pull dependency images.
+    await pullDependencyImages();
+
+    // Start dependency containers.
+    printAction('🚀 Creating dependency containers...');
+    for (const name of DEPEND_CONTAINERS) {
+        await createContainer(name);
+    }
+
+    // Start core containers: noona-vault and noona-portal.
+    printAction('🚀 Creating core containers...');
+    await createContainer('noona-vault');
+    await createContainer('noona-portal');
+
+    printResult('✔ All Noona containers started successfully');
+
+    // Schedule daily update checks at local midnight.
+    scheduleDailyUpdate();
+
+    printResult('🐳 Noona Container Management is running');
+    printDivider();
+}
+
+/**
+ * Checks Docker access and logs the version.
+ */
+async function checkDockerAccess() {
+    try {
+        const version = await docker.version();
+        printResult(`✔ Docker Version: ${version.Version}`);
+    } catch (err) {
+        printError(`Docker access error: ${err.message}`);
+        process.exit(1);
+    }
+}
+
+/**
+ * Schedules a daily update check to run at local midnight.
+ */
+function scheduleDailyUpdate() {
+    const now = new Date();
+    // Calculate the next midnight.
+    const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    const delay = nextMidnight - now;
+    printDebug(`Scheduling update check in ${delay} ms (next midnight).`);
+    setTimeout(async () => {
+        await runUpdateCheck();
+        // After the first run, schedule subsequent checks every 24 hours.
+        setInterval(runUpdateCheck, 24 * 60 * 60 * 1000);
+    }, delay);
+}
+
+/**
+ * Runs the update check: if any images require updating,
+ * it updates the corresponding containers.
+ */
+async function runUpdateCheck() {
+    try {
+        printDivider();
+        printAction('Performing scheduled update check...');
+        const updates = await checkForUpdate();
+        if (updates.length > 0) {
+            printAction('Updates available. Updating containers...');
+            for (const update of updates) {
+                await updateContainer(update.container);
+            }
+            printResult('✔ Update process completed.');
+        } else {
+            printNote('No updates available at this time.');
+        }
+        printDivider();
+    } catch (err) {
+        printError(`Error during scheduled update check: ${err.message}`);
+    }
+}
+
+// Export manageContainers for external usage.
+export { manageContainers };
+
+// If this module is run directly, start the management process.
+if (process.argv[1] === new URL(import.meta.url).pathname) {
+    manageContainers();
+}

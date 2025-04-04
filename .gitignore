@@ -29,7 +29,6 @@ logs/
 
 # Compiled files
 dist/
-build/
 
 # Patch files / temp dev artifacts
 *.patch

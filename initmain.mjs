@@ -1,7 +1,7 @@
 // initmain.mjs
 
-import dotenv from 'dotenv';
-dotenv.config({ path: '/noona/family/noona-warden/settings/config.env' });
+// Load environment variables from config.env (and auto-create if missing)
+import './noona/filesystem/loadEnv.mjs';
 
 import {
     printBanner,
@@ -10,8 +10,7 @@ import {
     printResult,
     printError
 } from './noona/logger/logUtils.mjs';
-
-import { validateEnv } from './noona/logger/validateEnv.mjs';
+import { validateEnv } from './noona/filesystem/validateEnv.mjs';
 import { generateKeys } from './noona/jwt/generateKeys.mjs';
 import { sendPublicKeyToRedis } from './noona/jwt/sendToRedis.mjs';
 import { createAndStoreServiceToken } from './noona/jwt/createServiceToken.mjs';

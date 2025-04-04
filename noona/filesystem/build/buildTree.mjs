@@ -7,45 +7,25 @@ import {
     printDivider,
     printSection,
     printDebug
-} from '../logger/logUtils.mjs';
+} from '../../logger/logUtils.mjs';
 
+// Updated folder tree without "depends", and updated for new structure.
 const TREE_STRUCTURE = {
     "noona-moon": { files: {} },
     "noona-oracle": { files: {} },
     "noona-portal": { files: {} },
-    "noona-raven": {
-        depends: {
-            "noona-anythingllm": { files: {} },
-            "noona-localai": { files: {} }
-        },
-        files: {}
-    },
-    "noona-sage": {
-        depends: {
-            "noona-grafana": { files: {} },
-            "noona-prometheus": { files: {} }
-        },
-        files: {}
-    },
-    "noona-vault": {
-        depends: {
-            "noona-mariadb": { files: {} },
-            "noona-milvus": {
-                depends: {
-                    "noona-etcd": { files: {} },
-                    "noona-minio": { files: {} }
-                },
-                files: {}
-            },
-            "noona-mongodb": { files: {} },
-            "noona-redis": { files: {} }
-        },
-        files: {}
-    },
-    "noona-warden": { files: {} }
+    "noona-raven": { files: {} },
+    "noona-sage": { files: {} },
+    "noona-vault": { files: {} },
+    "noona-warden": {
+        files: {
+            keys: {},
+            settings: {}
+        }
+    }
 };
 
-// Using an absolute path for the folder tree root
+// Using an absolute path for the family tree root
 const ROOT_PATH = path.resolve('/noona/family');
 
 const ensureDir = async (dirPath) => {

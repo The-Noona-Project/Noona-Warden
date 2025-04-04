@@ -4,10 +4,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Add `coderabbit.yml` and update project configurations&#10;&#10;Integrated `coderabbit.yml` for automated code reviews and insights, enhancing project workflows with AI-powered tools. Refined Docker workflows and updated configuration templates for better container management, clarity, and improved integration with external services. This update improves project maintainability and collaboration.">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Add `coderabbit.yml` and refine project configurations&#10;&#10;Integrated `coderabbit.yml` for AI-driven code reviews to enhance workflows. Updated Docker configurations for improved container management, clarified environment settings, and better service integration. Adjusted JWT key logic and streamlined environment variable handling for increased security and maintainability.">
+      <change afterPath="$PROJECT_DIR$/docker/start/startContainer.mjs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker/stop/deleteContainer.mjs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker/stop/stopContainer.mjs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker/update/UpdateContainer.mjs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker/update/checkForUpdate.mjs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/noona/filesystem/fileSystemManager.mjs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/noona/filesystem/load/loadConfig.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/containerPresets.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/containerPresets.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/buildNetwork.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/containerManager.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/containerManager.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/containerPresets.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/start/containerPresets.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/createOrStartContainer.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/displayPull.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/downloadImages.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/getMetadata.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/update/getMetadata.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/healthChecker.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/update/healthChecker.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/family/noona-warden/settings/config.env.template" beforeDir="false" afterPath="$PROJECT_DIR$/family/noona-warden/files/settings/config.env.template" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/initmain.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/initmain.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/filesystem/buildTree.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/logger/validateEnv.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/filesystem/load/validateEnv.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,48 +91,52 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml.noona-warden: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.initmain.mjs.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;2.0.0&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/The-Noona-Project/Noona-Warden/family/noona-warden/settings&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;discord-application&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Docker.Dockerfile.executor": "Run",
+    "Docker.docker-compose.yml.noona-warden: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
+    "Node.js.initmain.mjs.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "2.0.0",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "F:/The-Noona-Project/Noona-Warden/family/noona-warden/files/settings",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "discord-application",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mongo&quot;,
-      &quot;redis&quot;,
-      &quot;mariadb&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mongo",
+      "redis",
+      "mariadb"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\The-Noona-Project\Noona-Warden\family\noona-warden\files\settings" />
       <recent name="F:\The-Noona-Project\Noona-Warden\family\noona-warden\settings" />
       <recent name="F:\The-Noona-Project\Noona-Warden" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="F:\The-Noona-Project\Noona-Warden\family\noona-warden\settings" />
-      <recent name="F:\The-Noona-Project\Noona-Warden\noona\logger" />
-      <recent name="F:\The-Noona-Project\Noona-Warden" />
+      <recent name="F:\The-Noona-Project\Noona-Warden\noona\filesystem\load\" />
+      <recent name="F:\The-Noona-Project\Noona-Warden\noona\filesystem\build\" />
+      <recent name="F:\The-Noona-Project\Noona-Warden\docker\update\" />
+      <recent name="F:\The-Noona-Project\Noona-Warden\docker\start\" />
+      <recent name="F:\The-Noona-Project\Noona-Warden\docker\build\" />
     </key>
   </component>
   <component name="RunManager" selected="Docker.Dockerfile">
@@ -122,7 +148,7 @@
         <settings>
           <option name="imageTag" value="captainpax/noona-warden" />
           <option name="containerName" value="noona-warden" />
-          <option name="commandLineOptions" value="--env-file ./family/noona-warden/settings/config.env " />
+          <option name="commandLineOptions" value="" />
           <option name="sourceFilePath" value="Dockerfile" />
           <option name="volumeBindings">
             <list>
@@ -158,6 +184,8 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.Dockerfile" />
+        <item itemvalue="Node.js.initmain.mjs" />
         <item itemvalue="Docker.Dockerfile" />
         <item itemvalue="Node.js.initmain.mjs" />
       </list>
@@ -284,6 +312,11 @@
       <workItem from="1743391746200" duration="108000" />
       <workItem from="1743394139004" duration="95000" />
       <workItem from="1743395321050" duration="6000" />
+      <workItem from="1743429924544" duration="8000" />
+      <workItem from="1743429942387" duration="512000" />
+      <workItem from="1743433588199" duration="424000" />
+      <workItem from="1743464074472" duration="361000" />
+      <workItem from="1743704637048" duration="15727000" />
     </task>
     <task id="LOCAL-00001" summary="init Push">
       <option name="closed" value="true" />

@@ -1,4 +1,4 @@
-// /noona/warden/docker/getMetadata.mjs
+// /noona/warden/docker/update/getMetadata.mjs
 
 import Docker from 'dockerode';
 const docker = new Docker();
