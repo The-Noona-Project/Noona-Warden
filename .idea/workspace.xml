@@ -4,32 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Add `coderabbit.yml` and refine project configurations&#10;&#10;Integrated `coderabbit.yml` for AI-driven code reviews to enhance workflows. Updated Docker configurations for improved container management, clarified environment settings, and better service integration. Adjusted JWT key logic and streamlined environment variable handling for increased security and maintainability.">
-      <change afterPath="$PROJECT_DIR$/docker/start/startContainer.mjs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker/stop/deleteContainer.mjs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker/stop/stopContainer.mjs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker/update/UpdateContainer.mjs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker/update/checkForUpdate.mjs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/noona/filesystem/fileSystemManager.mjs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/noona/filesystem/load/loadConfig.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Refactor Docker and filesystem modules for modularity&#10;&#10;Reorganized Docker and filesystem-related modules to improve structure and modularity. Moved utility functions like `buildNetwork`, `buildTree`, and `createContainer` into separate, logically grouped files. Introduced new configuration management methods to streamline YAML-based settings updates.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/buildNetwork.mjs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/containerManager.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/containerManager.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/containerPresets.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/start/containerPresets.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/createOrStartContainer.mjs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/displayPull.mjs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/downloadImages.mjs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/getMetadata.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/update/getMetadata.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/healthChecker.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/update/healthChecker.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/family/noona-warden/settings/config.env.template" beforeDir="false" afterPath="$PROJECT_DIR$/family/noona-warden/files/settings/config.env.template" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/build/displayPull.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/build/displayPull.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/build/downloadImages.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/build/downloadImages.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/start/containerPresets.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/start/containerPresets.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/start/createContainer.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/start/createContainer.mjs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/initmain.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/initmain.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/noona/filesystem/buildTree.mjs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/noona/logger/validateEnv.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/filesystem/load/validateEnv.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/filesystem/load/loadConfig.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/filesystem/load/loadConfig.mjs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -316,7 +298,7 @@
       <workItem from="1743429942387" duration="512000" />
       <workItem from="1743433588199" duration="424000" />
       <workItem from="1743464074472" duration="361000" />
-      <workItem from="1743704637048" duration="15727000" />
+      <workItem from="1743704637048" duration="21059000" />
     </task>
     <task id="LOCAL-00001" summary="init Push">
       <option name="closed" value="true" />
@@ -446,7 +428,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743382350775</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Refactor Docker and filesystem modules for modularity&#10;&#10;Reorganized Docker and filesystem-related modules to improve structure and modularity. Moved utility functions like `buildNetwork`, `buildTree`, and `createContainer` into separate, logically grouped files. Introduced new configuration management methods to streamline YAML-based settings updates.">
+      <option name="closed" value="true" />
+      <created>1743730433410</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1743730433410</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -480,7 +470,9 @@
     <MESSAGE value="Refactor Docker workflows and update configuration templates.&#10;&#10;Improved container management with additional health checks, enhanced network settings, and clarified volume bindings. Simplified `config.env` template by consolidating reusable secrets and restructuring sections for clarity. Updated initialization logic for better integration with Vault and Portal services." />
     <MESSAGE value="Refactor Docker workflows and update configuration templates&#10;&#10;Improved container management with added health checks, enhanced network settings, and updated volume bindings. Consolidated reusable secrets in `config.env` and shifted to `MONGO_INITDB` variables for better clarity. Modified initialization logic for streamlined integration with Vault and Portal services." />
     <MESSAGE value="Add `coderabbit.yml` and update project configurations&#10;&#10;Integrated `coderabbit.yml` for automated code reviews and insights, enhancing project workflows with AI-powered tools. Refined Docker workflows and updated configuration templates for better container management, clarity, and improved integration with external services. This update improves project maintainability and collaboration." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add `coderabbit.yml` and update project configurations&#10;&#10;Integrated `coderabbit.yml` for automated code reviews and insights, enhancing project workflows with AI-powered tools. Refined Docker workflows and updated configuration templates for better container management, clarity, and improved integration with external services. This update improves project maintainability and collaboration." />
+    <MESSAGE value="Add `coderabbit.yml` and refine project configurations&#10;&#10;Integrated `coderabbit.yml` for AI-driven code reviews to enhance workflows. Updated Docker configurations for improved container management, clarified environment settings, and better service integration. Adjusted JWT key logic and streamlined environment variable handling for increased security and maintainability." />
+    <MESSAGE value="Refactor Docker and filesystem modules for modularity&#10;&#10;Reorganized Docker and filesystem-related modules to improve structure and modularity. Moved utility functions like `buildNetwork`, `buildTree`, and `createContainer` into separate, logically grouped files. Introduced new configuration management methods to streamline YAML-based settings updates." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor Docker and filesystem modules for modularity&#10;&#10;Reorganized Docker and filesystem-related modules to improve structure and modularity. Moved utility functions like `buildNetwork`, `buildTree`, and `createContainer` into separate, logically grouped files. Introduced new configuration management methods to streamline YAML-based settings updates." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

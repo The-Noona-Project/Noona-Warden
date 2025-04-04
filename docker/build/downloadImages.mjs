@@ -1,7 +1,8 @@
 // docker/build/downloadImages.mjs
+
 import Docker from 'dockerode';
 import { handlePullProgress } from './displayPull.mjs';
-import { getImageSize, formatBytes } from '../getMetadata.mjs';
+import { getImageSize, formatBytes } from '../update/getMetadata.mjs';
 import {
     printSubHeader,
     printSpacer,
@@ -11,7 +12,7 @@ import {
     printDownloadSummary,
     printResult
 } from '../../noona/logger/logUtils.mjs';
-import { containerPresets } from '../containerPresets.mjs';
+import { containerPresets } from '../start/containerPresets.mjs';
 
 const docker = new Docker({ socketPath: '/var/run/docker.sock' });
 
@@ -23,7 +24,6 @@ const docker = new Docker({ socketPath: '/var/run/docker.sock' });
 async function imageExistsLocally(imageName) {
     try {
         const images = await docker.listImages();
-        // Check if any image's RepoTags include the given image name.
         return images.some(img => img.RepoTags && img.RepoTags.includes(imageName));
     } catch (err) {
         printError(`❌ Failed to check local images: ${err.message}`);
@@ -32,27 +32,22 @@ async function imageExistsLocally(imageName) {
 }
 
 /**
- * Pulls all required dependency images and displays download status.
- * Only pulls images for containers active in Warden scope.
+ * Pulls all required dependency images for Warden core.
  */
 export async function pullDependencyImages() {
     printDivider();
     printSubHeader('📦 Downloading Docker Images');
     printDivider();
 
-    // Define only the containers needed by Warden.
-    const wardenContainers = [
+    const dependencyContainers = [
         'noona-redis',
         'noona-mongodb',
-        'noona-mariadb',
-        'noona-vault',
-        'noona-portal'
+        'noona-mariadb'
     ];
 
-    // Get unique image names from container presets.
     const uniqueImages = [
         ...new Set(
-            wardenContainers
+            dependencyContainers
                 .map(name => containerPresets[name])
                 .filter(Boolean)
                 .map(preset => preset.Image)
@@ -77,7 +72,58 @@ export async function pullDependencyImages() {
             printNote(`Pulling image: ${imageName}...`);
             const pullStream = await docker.pull(imageName);
             await handlePullProgress(docker, pullStream, imageName);
-            // Optionally log size after pull.
+            const size = await getImageSize(imageName);
+            printNote(`› › Downloaded Size: ${formatBytes(size)}`);
+            printDivider();
+        } catch (err) {
+            printError(`❌ Failed to pull ${imageName}: ${err.message}`);
+            printDivider();
+        }
+    }
+
+    printDownloadSummary();
+}
+
+/**
+ * Pulls Docker images for core Noona services like vault/portal/etc.
+ */
+export async function pullNoonaImages() {
+    printDivider();
+    printSubHeader('📦 Downloading Noona Component Images');
+    printDivider();
+
+    const noonaServices = [
+        'noona-vault',
+        'noona-portal'
+    ];
+
+    const uniqueImages = [
+        ...new Set(
+            noonaServices
+                .map(name => containerPresets[name])
+                .filter(Boolean)
+                .map(preset => preset.Image)
+        )
+    ];
+
+    for (const imageName of uniqueImages) {
+        printSpacer();
+        printSubHeader(`📦 Image: ${imageName}`);
+
+        try {
+            const exists = await imageExistsLocally(imageName);
+
+            if (exists) {
+                printResult(`✔ Reusing image: ${imageName}`);
+                const size = await getImageSize(imageName);
+                printNote(`› › Total Size: ${formatBytes(size)}`);
+                printDivider();
+                continue;
+            }
+
+            printNote(`Pulling image: ${imageName}...`);
+            const pullStream = await docker.pull(imageName);
+            await handlePullProgress(docker, pullStream, imageName);
             const size = await getImageSize(imageName);
             printNote(`› › Downloaded Size: ${formatBytes(size)}`);
             printDivider();

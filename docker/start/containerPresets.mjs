@@ -1,14 +1,12 @@
-// /noona/containerPresets.mjs
-
+// noona/containerPresets.mjs
 import fs from 'fs';
 import path from 'path';
-import dotenv from 'dotenv';
 
-// The family mount base where host folders reside
+// Base directory for Noona containers
 const FAMILY_MOUNT_BASE = '/noona/family';
 
-// 🔐 Load the private JWT key from the Noona-Warden key folder
-const jwtPrivateKeyPath = '/noona/family/noona-warden/files/keys/private.pem';
+// Load the private JWT key from the Noona-Warden key folder
+const jwtPrivateKeyPath = path.join(FAMILY_MOUNT_BASE, 'noona-warden', 'files', 'keys', 'private.pem');
 let jwtPrivateKey = '';
 
 if (fs.existsSync(jwtPrivateKeyPath)) {
@@ -25,7 +23,7 @@ export const containerPresets = {
         name: 'noona-redis',
         ExposedPorts: { '6379/tcp': {} },
         Volumes: {
-            '/data': {} // use Docker-managed volume for persistence
+            '/data': {}
         },
         HostConfig: {
             PortBindings: {
@@ -35,7 +33,7 @@ export const containerPresets = {
         },
         NetworkingConfig: {
             EndpointsConfig: {
-                'bridge': {},
+                bridge: {},
                 'noona-network': {}
             }
         },
@@ -53,14 +51,12 @@ export const containerPresets = {
         name: 'noona-mongodb',
         ExposedPorts: { '27017/tcp': {} },
         Env: [
-            // Use dedicated init variables if available; otherwise fall back to MONGO_USER/MONGO_PASSWORD/MONGO_DATABASE.
             `MONGO_INITDB_ROOT_USERNAME=${process.env.MONGO_INITDB_ROOT_USERNAME || process.env.MONGO_USER}`,
             `MONGO_INITDB_ROOT_PASSWORD=${process.env.MONGO_INITDB_ROOT_PASSWORD || process.env.MONGO_PASSWORD}`,
             `MONGO_INITDB_DATABASE=${process.env.MONGO_INITDB_DATABASE || process.env.MONGO_DATABASE}`
-            // The official Mongo image auto-creates the root user and database on first run.
         ],
         Volumes: {
-            '/data/db': {} // Docker volume for MongoDB data
+            '/data/db': {}
         },
         HostConfig: {
             PortBindings: {
@@ -70,7 +66,7 @@ export const containerPresets = {
         },
         NetworkingConfig: {
             EndpointsConfig: {
-                'bridge': {},
+                bridge: {},
                 'noona-network': {}
             }
         },
@@ -98,7 +94,7 @@ export const containerPresets = {
             `MYSQL_PASSWORD=${process.env.MARIADB_PASSWORD}`
         ],
         Volumes: {
-            '/var/lib/mysql': {} // Docker volume for MariaDB data
+            '/var/lib/mysql': {}
         },
         HostConfig: {
             PortBindings: {
@@ -108,7 +104,7 @@ export const containerPresets = {
         },
         NetworkingConfig: {
             EndpointsConfig: {
-                'bridge': {},
+                bridge: {},
                 'noona-network': {}
             }
         },
@@ -131,7 +127,7 @@ export const containerPresets = {
         Env: [
             `NODE_ENV=${process.env.NODE_ENV}`,
             `PORT=${process.env.VAULT_PORT}`,
-            `MONGO_URL=${process.env.MONGO_URL}`, // Full URL with credentials from config.env
+            `MONGO_URL=${process.env.MONGO_URL}`,
             `REDIS_URL=${process.env.REDIS_URL}`,
             `MARIADB_USER=${process.env.MARIADB_USER}`,
             `MARIADB_PASSWORD=${process.env.MARIADB_PASSWORD}`,
@@ -144,7 +140,6 @@ export const containerPresets = {
         ExposedPorts: {
             [`${process.env.VAULT_PORT}/tcp`]: {}
         },
-        // Use a bind mount from the family folder for Vault data
         HostConfig: {
             PortBindings: {
                 [`${process.env.VAULT_PORT}/tcp`]: [
@@ -158,7 +153,7 @@ export const containerPresets = {
         },
         NetworkingConfig: {
             EndpointsConfig: {
-                'bridge': {},
+                bridge: {},
                 'noona-network': {}
             }
         },
@@ -201,7 +196,9 @@ export const containerPresets = {
         },
         HostConfig: {
             PortBindings: {
-                [`${process.env.PORTAL_PORT}/tcp`]: [{ HostPort: process.env.PORTAL_PORT }]
+                [`${process.env.PORTAL_PORT}/tcp`]: [
+                    { HostPort: process.env.PORTAL_PORT }
+                ]
             },
             Binds: [
                 `${FAMILY_MOUNT_BASE}/noona-portal/files:/app/files`
@@ -210,7 +207,7 @@ export const containerPresets = {
         },
         NetworkingConfig: {
             EndpointsConfig: {
-                'bridge': {},
+                bridge: {},
                 'noona-network': {}
             }
         },

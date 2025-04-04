@@ -8,7 +8,7 @@ import {
     printDivider,
     printError
 } from '../../noona/logger/logUtils.mjs';
-import { formatBytes, ordinalSuffix } from '../getMetadata.mjs';
+import { formatBytes, ordinalSuffix } from '../update/getMetadata.mjs';
 
 /**
  * Handles Docker image pull progress with precise milestone logging per layer.
