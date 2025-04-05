@@ -1,3 +1,4 @@
+// noona/jwt/createServiceToken.mjs
 import fs from 'fs';
 import path from 'path';
 import jwt from 'jsonwebtoken';
@@ -10,6 +11,7 @@ export const createAndStoreServiceToken = async (serviceName, expiresIn = '365d'
     let privateKey;
     let privateKeyPath;
 
+    // Use JWT_PRIVATE_KEY_PATH from env if available; otherwise use the fallback path.
     if (process.env.JWT_PRIVATE_KEY_PATH && fs.existsSync(process.env.JWT_PRIVATE_KEY_PATH)) {
         privateKeyPath = process.env.JWT_PRIVATE_KEY_PATH;
         printDebug(`[JWT] Using JWT_PRIVATE_KEY_PATH from env: ${privateKeyPath}`);
@@ -34,11 +36,13 @@ export const createAndStoreServiceToken = async (serviceName, expiresIn = '365d'
     const token = jwt.sign(payload, privateKey, { algorithm: 'RS256', expiresIn });
     printDebug(`[JWT] Token generated for ${serviceName}, expires in ${expiresIn}`);
 
+    // Use the REDIS_URL from environment variables.
     const redisUrl = process.env.REDIS_URL;
     if (!redisUrl) {
         throw new Error('REDIS_URL environment variable is not defined');
     }
     const redisClient = createClient({ url: redisUrl });
+    // Use a unique Redis key for each service token.
     const redisKey = `NOONA:TOKEN:${serviceName}`;
 
     try {
@@ -51,4 +55,4 @@ export const createAndStoreServiceToken = async (serviceName, expiresIn = '365d'
     } finally {
         await redisClient.disconnect();
     }
-}; 
+};
