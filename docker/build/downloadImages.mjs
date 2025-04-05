@@ -12,7 +12,7 @@ import {
     printDownloadSummary,
     printResult
 } from '../../noona/logger/logUtils.mjs';
-import { containerPresets } from '../start/containerPresets.mjs';
+import { getContainerPresets } from '../start/containerPresets.mjs';
 
 const docker = new Docker({ socketPath: '/var/run/docker.sock' });
 
@@ -35,6 +35,8 @@ async function imageExistsLocally(imageName) {
  * Pulls all required dependency images for Warden core.
  */
 export async function pullDependencyImages() {
+    const containerPresets = getContainerPresets();
+
     printDivider();
     printSubHeader('📦 Downloading Docker Images');
     printDivider();
@@ -88,6 +90,8 @@ export async function pullDependencyImages() {
  * Pulls Docker images for core Noona services like vault/portal/etc.
  */
 export async function pullNoonaImages() {
+    const containerPresets = getContainerPresets();
+
     printDivider();
     printSubHeader('📦 Downloading Noona Component Images');
     printDivider();
