@@ -138,20 +138,17 @@ async function checkDockerAccess() {
  */
 function scheduleDailyUpdate() {
     const now = new Date();
-    // Calculate the next midnight.
     const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
     const delay = nextMidnight - now;
     printDebug(`Scheduling update check in ${delay} ms (next midnight).`);
     setTimeout(async () => {
         await runUpdateCheck();
-        // After the first run, schedule subsequent checks every 24 hours.
         setInterval(runUpdateCheck, 24 * 60 * 60 * 1000);
     }, delay);
 }
 
 /**
- * Runs the update check: if any images require updating,
- * it updates the corresponding containers.
+ * Runs the update check: if any images require updating, it updates the corresponding containers.
  */
 async function runUpdateCheck() {
     try {

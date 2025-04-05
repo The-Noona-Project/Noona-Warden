@@ -68,15 +68,13 @@ export async function createContainer(containerName) {
         printNote(`✔ Reusing local image: ${imageName}`);
     }
 
-    // ───── Inject private key if this is a Noona service ─────
+    // ───── Inject private key if this is a Noona core service ─────
     if (NOONA_CORE_SERVICES.includes(containerName)) {
         const privateKeyPath = path.join('/noona/family/noona-warden/files/keys', 'private.pem');
         try {
             if (!fs.existsSync(privateKeyPath)) throw new Error('Private key missing');
-
             const currentPrivateKey = fs.readFileSync(privateKeyPath, 'utf-8');
             printDebug(`[createContainer] Read private key from: ${privateKeyPath}`);
-
             if (Array.isArray(preset.Env)) {
                 const keyLine = `JWT_PRIVATE_KEY=${currentPrivateKey}`;
                 const index = preset.Env.findIndex(e => e.startsWith('JWT_PRIVATE_KEY='));
@@ -106,7 +104,7 @@ export async function createContainer(containerName) {
         }
     }
 
-    // ───── Create and start ─────
+    // ───── Create and start container ─────
     printAction(`› Creating container: ${containerName}`);
     try {
         const container = await docker.createContainer(preset);

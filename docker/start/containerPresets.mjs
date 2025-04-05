@@ -95,7 +95,7 @@ export function getContainerPresets() {
                 }
             },
             Healthcheck: {
-                Test: ['CMD-SHELL', 'mysqladmin ping -h localhost -u root -p${MYSQL_ROOT_PASSWORD} || exit 1'],
+                Test: ['CMD-SHELL', 'mysqladmin ping -h localhost -u root -p"$MYSQL_ROOT_PASSWORD" || exit 1'],
                 Interval: 10e9,
                 Timeout: 5e9,
                 Retries: 5,

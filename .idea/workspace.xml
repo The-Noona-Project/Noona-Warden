@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Refactor Docker container creation and configuration loading&#10;&#10;Replaced `containerPresets` static object with `getContainerPresets` function for improved modularity and maintainability. Enhanced the container creation process to dynamically handle private key injection for core Noona services and added a safeguard to validate ENV variables. This update streamlines container management, ensuring better flexibility and improved workflow robustness.">
+    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Mirror additional environment variables in config loader&#10;&#10;Extended mirroring logic to include MongoDB init credentials and other database-related keys. This ensures alignment between configuration paths and environment variables, improving consistency and usability across services. Enhanced comments and structure for better code maintainability.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/containerManager.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/containerManager.mjs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker/start/containerPresets.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/start/containerPresets.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/noona/filesystem/load/loadConfig.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/filesystem/load/loadConfig.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/start/createContainer.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/start/createContainer.mjs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,8 +126,8 @@
       <deployment type="dockerfile">
         <settings>
           <option name="imageTag" value="captainpax/noona-warden" />
+          <option name="buildCliOptions" value="--no-cache" />
           <option name="containerName" value="noona-warden" />
-          <option name="commandLineOptions" value="" />
           <option name="sourceFilePath" value="Dockerfile" />
           <option name="volumeBindings">
             <list>
@@ -297,7 +298,12 @@
       <workItem from="1743704637048" duration="22594000" />
       <workItem from="1743809372567" duration="6664000" />
       <workItem from="1743816816111" duration="7000" />
-      <workItem from="1743816833642" duration="343000" />
+      <workItem from="1743816833642" duration="386000" />
+      <workItem from="1743817456197" duration="26000" />
+      <workItem from="1743817887583" duration="240000" />
+      <workItem from="1743818350719" duration="1000" />
+      <workItem from="1743818358889" duration="198000" />
+      <workItem from="1743818567106" duration="355000" />
     </task>
     <task id="LOCAL-00001" summary="init Push">
       <option name="closed" value="true" />
@@ -459,7 +465,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743816147040</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Mirror additional environment variables in config loader&#10;&#10;Extended mirroring logic to include MongoDB init credentials and other database-related keys. This ensures alignment between configuration paths and environment variables, improving consistency and usability across services. Enhanced comments and structure for better code maintainability.">
+      <option name="closed" value="true" />
+      <created>1743817211397</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1743817211397</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -498,7 +512,8 @@
     <MESSAGE value="Refactor and enhance Docker workflows and config handling&#10;&#10;Streamlined Docker and filesystem module structures for better modularity. Refactored configuration loading with a focus on flattening and mirroring environment variables for flexibility. Enhanced image pulling and container management, including distinct support for dependencies and Noona services." />
     <MESSAGE value="Refactor and enhance Docker container creation logic&#10;&#10;Improved modularity and clarity in Docker workflows by refining the container creation process. Updated image pulling, environment variable handling, and private key injection to ensure better flexibility and maintainability. These changes streamline container setup and enhance overall workflow robustness." />
     <MESSAGE value="Refactor Docker container creation and configuration loading&#10;&#10;Replaced `containerPresets` static object with `getContainerPresets` function for improved modularity and maintainability. Enhanced the container creation process to dynamically handle private key injection for core Noona services and added a safeguard to validate ENV variables. This update streamlines container management, ensuring better flexibility and improved workflow robustness." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor Docker container creation and configuration loading&#10;&#10;Replaced `containerPresets` static object with `getContainerPresets` function for improved modularity and maintainability. Enhanced the container creation process to dynamically handle private key injection for core Noona services and added a safeguard to validate ENV variables. This update streamlines container management, ensuring better flexibility and improved workflow robustness." />
+    <MESSAGE value="Mirror additional environment variables in config loader&#10;&#10;Extended mirroring logic to include MongoDB init credentials and other database-related keys. This ensures alignment between configuration paths and environment variables, improving consistency and usability across services. Enhanced comments and structure for better code maintainability." />
+    <option name="LAST_COMMIT_MESSAGE" value="Mirror additional environment variables in config loader&#10;&#10;Extended mirroring logic to include MongoDB init credentials and other database-related keys. This ensures alignment between configuration paths and environment variables, improving consistency and usability across services. Enhanced comments and structure for better code maintainability." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
