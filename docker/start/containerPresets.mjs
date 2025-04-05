@@ -18,7 +18,7 @@ export function getContainerPresets() {
     const PORTAL_PORT = process.env.PORTAL_PORT || '3121';
 
     return {
-        // ───── Redis (dependency; no private key injection) ─────
+        // ───── Redis (Dependency: no private key injection) ─────
         'noona-redis': {
             Image: 'redis:8.0-M04-alpine',
             name: 'noona-redis',
@@ -42,7 +42,7 @@ export function getContainerPresets() {
             }
         },
 
-        // ───── MongoDB (dependency; no private key injection) ─────
+        // ───── MongoDB (Dependency: no private key injection) ─────
         'noona-mongodb': {
             Image: 'mongo:8.0.6-noble',
             name: 'noona-mongodb',
@@ -72,7 +72,7 @@ export function getContainerPresets() {
             }
         },
 
-        // ───── MariaDB (dependency; no private key injection) ─────
+        // ───── MariaDB (Dependency: no private key injection) ─────
         'noona-mariadb': {
             Image: 'mariadb:11.8.1-ubi-rc',
             name: 'noona-mariadb',
@@ -103,7 +103,7 @@ export function getContainerPresets() {
             }
         },
 
-        // ───── Vault (core service; inject private key) ─────
+        // ───── Vault (Core service: inject private key) ─────
         'noona-vault': {
             Image: 'captainpax/noona-vault:latest',
             name: 'noona-vault',
@@ -117,7 +117,7 @@ export function getContainerPresets() {
                 `MARIADB_DATABASE=${process.env.MARIADB_DATABASE}`,
                 `MARIADB_HOST=noona-mariadb`,
                 `MARIADB_PORT=${process.env.MARIADB_PORT || 3306}`,
-                // Inject private key for core service:
+                // Inject private key for core service
                 `JWT_PRIVATE_KEY=${jwtPrivateKey}`,
                 `PROJECT_NAME=${process.env.PROJECT_NAME || 'The Noona Project'}`
             ],
@@ -146,7 +146,7 @@ export function getContainerPresets() {
             }
         },
 
-        // ───── Portal (core service; inject private key) ─────
+        // ───── Portal (Core service: inject private key) ─────
         'noona-portal': {
             Image: 'captainpax/noona-portal:latest',
             name: 'noona-portal',
@@ -166,7 +166,7 @@ export function getContainerPresets() {
                 `VAULT_URL=${process.env.VAULT_URL}`,
                 `VAULT_JWT=${process.env.VAULT_JWT}`,
                 `REDIS_URL=${process.env.REDIS_URL}`,
-                // Inject private key for core service:
+                // Inject private key for core service
                 `JWT_PRIVATE_KEY=${jwtPrivateKey}`,
                 `PROJECT_NAME=${process.env.PROJECT_NAME || 'The Noona Project'}`,
                 `NODE_ENV=${process.env.NODE_ENV}`,

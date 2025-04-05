@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Refactor and enhance Docker container creation logic&#10;&#10;Improved modularity and clarity in Docker workflows by refining the container creation process. Updated image pulling, environment variable handling, and private key injection to ensure better flexibility and maintainability. These changes streamline container setup and enhance overall workflow robustness.">
+    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Refactor Docker container creation and configuration loading&#10;&#10;Replaced `containerPresets` static object with `getContainerPresets` function for improved modularity and maintainability. Enhanced the container creation process to dynamically handle private key injection for core Noona services and added a safeguard to validate ENV variables. This update streamlines container management, ensuring better flexibility and improved workflow robustness.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/build/downloadImages.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/build/downloadImages.mjs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker/start/containerPresets.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/start/containerPresets.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/start/createContainer.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/docker/start/createContainer.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/initmain.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/initmain.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/filesystem/load/loadConfig.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/filesystem/load/loadConfig.mjs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,40 +69,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml.noona-warden: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.initmain.mjs.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;2.0.0&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/The-Noona-Project/Noona-Warden/family/noona-warden/files/settings&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;discord-application&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Docker.Dockerfile.executor": "Run",
+    "Docker.docker-compose.yml.noona-warden: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
+    "Node.js.initmain.mjs.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "2.0.0",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "F:/The-Noona-Project/Noona-Warden/family/noona-warden/files/settings",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "discord-application",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mongo&quot;,
-      &quot;redis&quot;,
-      &quot;mariadb&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mongo",
+      "redis",
+      "mariadb"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="F:\The-Noona-Project\Noona-Warden\family\noona-warden\files\settings" />
@@ -297,7 +295,9 @@
       <workItem from="1743433588199" duration="424000" />
       <workItem from="1743464074472" duration="361000" />
       <workItem from="1743704637048" duration="22594000" />
-      <workItem from="1743809372567" duration="6411000" />
+      <workItem from="1743809372567" duration="6664000" />
+      <workItem from="1743816816111" duration="7000" />
+      <workItem from="1743816833642" duration="343000" />
     </task>
     <task id="LOCAL-00001" summary="init Push">
       <option name="closed" value="true" />
@@ -451,7 +451,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743739302663</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Refactor Docker container creation and configuration loading&#10;&#10;Replaced `containerPresets` static object with `getContainerPresets` function for improved modularity and maintainability. Enhanced the container creation process to dynamically handle private key injection for core Noona services and added a safeguard to validate ENV variables. This update streamlines container management, ensuring better flexibility and improved workflow robustness.">
+      <option name="closed" value="true" />
+      <created>1743816147040</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1743816147040</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -489,7 +497,8 @@
     <MESSAGE value="Refactor Docker and filesystem modules for modularity&#10;&#10;Reorganized Docker and filesystem-related modules to improve structure and modularity. Moved utility functions like `buildNetwork`, `buildTree`, and `createContainer` into separate, logically grouped files. Introduced new configuration management methods to streamline YAML-based settings updates." />
     <MESSAGE value="Refactor and enhance Docker workflows and config handling&#10;&#10;Streamlined Docker and filesystem module structures for better modularity. Refactored configuration loading with a focus on flattening and mirroring environment variables for flexibility. Enhanced image pulling and container management, including distinct support for dependencies and Noona services." />
     <MESSAGE value="Refactor and enhance Docker container creation logic&#10;&#10;Improved modularity and clarity in Docker workflows by refining the container creation process. Updated image pulling, environment variable handling, and private key injection to ensure better flexibility and maintainability. These changes streamline container setup and enhance overall workflow robustness." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor and enhance Docker container creation logic&#10;&#10;Improved modularity and clarity in Docker workflows by refining the container creation process. Updated image pulling, environment variable handling, and private key injection to ensure better flexibility and maintainability. These changes streamline container setup and enhance overall workflow robustness." />
+    <MESSAGE value="Refactor Docker container creation and configuration loading&#10;&#10;Replaced `containerPresets` static object with `getContainerPresets` function for improved modularity and maintainability. Enhanced the container creation process to dynamically handle private key injection for core Noona services and added a safeguard to validate ENV variables. This update streamlines container management, ensuring better flexibility and improved workflow robustness." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor Docker container creation and configuration loading&#10;&#10;Replaced `containerPresets` static object with `getContainerPresets` function for improved modularity and maintainability. Enhanced the container creation process to dynamically handle private key injection for core Noona services and added a safeguard to validate ENV variables. This update streamlines container management, ensuring better flexibility and improved workflow robustness." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

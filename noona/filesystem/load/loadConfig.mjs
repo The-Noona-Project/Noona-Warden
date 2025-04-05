@@ -1,3 +1,4 @@
+// noona/filesystem/load/loadConfig.mjs
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
@@ -37,7 +38,7 @@ function injectFlatConfig(flatConfig) {
             printNote(`Set env: ${key} = ${value}`);
         }
 
-        // Mirror short suffix (e.g., URL, PORT) if not already present
+        // Mirror short suffix keys (e.g., PORT, URL, TOKEN, KEY, PASSWORD, USER, DATABASE)
         const match = key.match(/(?:^|_)((PORT|URL|TOKEN|KEY|PASSWORD|USER|DATABASE))$/i);
         if (match) {
             const shortKey = match[1].toUpperCase();
@@ -50,7 +51,7 @@ function injectFlatConfig(flatConfig) {
 }
 
 /**
- * Mirror specific expected keys from known flat paths.
+ * Mirrors specific expected keys from known flat paths.
  */
 function mirrorExpectedKeys() {
     const map = {
@@ -58,10 +59,18 @@ function mirrorExpectedKeys() {
         VAULT_JWT: 'TOKENS_JWT_SECRET',
         PORTAL_JWT_SECRET: 'TOKENS_JWT_SECRET',
         MONGO_URL: 'MONGO_MONGO_URL',
+        // Mirror MongoDB init credentials
+        MONGO_INITDB_ROOT_USERNAME: 'MONGO_MONGO_INITDB_ROOT_USERNAME',
+        MONGO_INITDB_ROOT_PASSWORD: 'MONGO_MONGO_INITDB_ROOT_PASSWORD',
+        MONGO_INITDB_DATABASE: 'MONGO_MONGO_INITDB_DATABASE',
+        MONGO_USER: 'MONGO_MONGO_USER',
+        MONGO_PASSWORD: 'MONGO_MONGO_PASSWORD',
+        MONGO_DATABASE: 'MONGO_MONGO_DATABASE',
         REDIS_URL: 'REDIS_REDIS_URL',
         MARIADB_USER: 'MARIADB_MARIADB_USER',
         MARIADB_PASSWORD: 'MARIADB_MARIADB_PASSWORD',
         MARIADB_DATABASE: 'MARIADB_MARIADB_DATABASE',
+        MARIADB_HOST: 'MARIADB_MARIADB_HOST',
         VAULT_PORT: 'NOONA_VAULT_API_VAULT_PORT',
         PORTAL_PORT: 'NOONA_PORTAL_API_PORTAL_PORT',
         DISCORD_TOKEN: 'NOONA_PORTAL_DISCORD_BOT_DISCORD_TOKEN',
@@ -95,7 +104,6 @@ function patchJwtMirrors() {
         printNote('Skipping JWT mirror patching – JWT_SECRET not defined.');
         return;
     }
-
     const mirrorKeys = ['VAULT_JWT', 'PORTAL_JWT_SECRET', 'JWT_PUBLIC_KEY'];
     for (const key of mirrorKeys) {
         if (!process.env[key]) {
@@ -111,13 +119,12 @@ export async function loadConfig() {
             printError(`Configuration file not found at ${configFilePath}`);
             process.exit(1);
         }
-
         const fileContents = fs.readFileSync(configFilePath, 'utf8');
         const config = yaml.load(fileContents);
 
         const flatConfig = flattenConfig(config);
         injectFlatConfig(flatConfig);
-        mirrorExpectedKeys();       // ⬅️ NEW: bridge expected keys
+        mirrorExpectedKeys();
         patchJwtMirrors();
 
         printResult(`Loaded configuration from ${configFilePath}`);
