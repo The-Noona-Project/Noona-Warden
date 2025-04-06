@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Add support for new env variables and enhance token handling&#10;&#10;Add VAULT_URL to environment variable mappings and improve `createServiceToken` logic to use `JWT_PRIVATE_KEY_PATH` and `REDIS_URL` from the environment when available. Ensure unique Redis keys for each service token to avoid conflicts.">
+    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Update Redis key logic and add service-specific support&#10;&#10;Modified `sendPublicKeyToRedis` to include a `serviceName` parameter, creating unique Redis keys in the format `NOONA:TOKEN:&lt;serviceName&gt;`. Improved environment variable handling and updated key-loading behavior for better flexibility and robustness.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/initmain.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/initmain.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/jwt/createServiceToken.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/jwt/createServiceToken.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/jwt/sendToRedis.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/jwt/sendToRedis.mjs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,39 +70,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml.noona-warden: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.initmain.mjs.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/The-Noona-Project/Noona-Warden/family/noona-warden/files/settings&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;discord-application&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Docker.Dockerfile.executor": "Run",
+    "Docker.docker-compose.yml.noona-warden: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
+    "Node.js.initmain.mjs.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "1.0.1",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "F:/The-Noona-Project/Noona-Warden/family/noona-warden/files/settings",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "discord-application",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mongo&quot;,
-      &quot;redis&quot;,
-      &quot;mariadb&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mongo",
+      "redis",
+      "mariadb"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="F:\The-Noona-Project\Noona-Warden\family\noona-warden\files\settings" />
@@ -306,6 +310,11 @@
       <workItem from="1743821263423" duration="18000" />
       <workItem from="1743821289213" duration="643000" />
       <workItem from="1743853276604" duration="3580000" />
+      <workItem from="1743857742247" duration="318000" />
+      <workItem from="1743889305519" duration="814000" />
+      <workItem from="1743960574216" duration="484000" />
+      <workItem from="1743961110185" duration="12000" />
+      <workItem from="1743961130112" duration="424000" />
     </task>
     <task id="LOCAL-00001" summary="init Push">
       <option name="closed" value="true" />
@@ -491,7 +500,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743821228133</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Update Redis key logic and add service-specific support&#10;&#10;Modified `sendPublicKeyToRedis` to include a `serviceName` parameter, creating unique Redis keys in the format `NOONA:TOKEN:&lt;serviceName&gt;`. Improved environment variable handling and updated key-loading behavior for better flexibility and robustness.">
+      <option name="closed" value="true" />
+      <created>1743858054877</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1743858054877</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -534,7 +551,8 @@
     <MESSAGE value="Refactor Docker workflows and improve maintainability&#10;&#10;Streamlined container creation logic by refining private key injection and clarifying service-specific behaviors. Updated health check commands and improved documentation to enhance clarity and code structure. These changes boost modularity, flexibility, and robustness across Docker workflows." />
     <MESSAGE value="Add new env variables and refactor Docker workflows&#10;&#10;Added mappings for VAULT_URL in the config loader and improved JWT logic to support dynamic private key paths and Redis configurations. Refactored Docker workflows to enhance modularity, maintainability, and overall clarity in container creation and management. These updates ensure better environment alignment and robust application behavior." />
     <MESSAGE value="Add support for new env variables and enhance token handling&#10;&#10;Add VAULT_URL to environment variable mappings and improve `createServiceToken` logic to use `JWT_PRIVATE_KEY_PATH` and `REDIS_URL` from the environment when available. Ensure unique Redis keys for each service token to avoid conflicts." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add support for new env variables and enhance token handling&#10;&#10;Add VAULT_URL to environment variable mappings and improve `createServiceToken` logic to use `JWT_PRIVATE_KEY_PATH` and `REDIS_URL` from the environment when available. Ensure unique Redis keys for each service token to avoid conflicts." />
+    <MESSAGE value="Update Redis key logic and add service-specific support&#10;&#10;Modified `sendPublicKeyToRedis` to include a `serviceName` parameter, creating unique Redis keys in the format `NOONA:TOKEN:&lt;serviceName&gt;`. Improved environment variable handling and updated key-loading behavior for better flexibility and robustness." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update Redis key logic and add service-specific support&#10;&#10;Modified `sendPublicKeyToRedis` to include a `serviceName` parameter, creating unique Redis keys in the format `NOONA:TOKEN:&lt;serviceName&gt;`. Improved environment variable handling and updated key-loading behavior for better flexibility and robustness." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

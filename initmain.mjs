@@ -11,7 +11,6 @@ import {
 import { manageFiles } from './noona/filesystem/fileSystemManager.mjs';
 import { generateKeys } from './noona/jwt/generateKeys.mjs';
 import { sendPublicKeyToRedis } from './noona/jwt/sendToRedis.mjs';
-import { createAndStoreServiceToken } from './noona/jwt/createServiceToken.mjs';
 import { manageContainers } from './docker/containerManager.mjs';
 
 printBanner('Noona');
@@ -30,15 +29,10 @@ printBanner('Noona');
         // 📦 Container Bootstrapping
         await manageContainers();
 
-        // 🛰️ JWT Public Key → Redis
-        printSection('📡 Sending JWT Public Key to Redis');
-        await sendPublicKeyToRedis();
-        printResult('✔ Public JWT key shared with Redis');
-
-        // 🔐 Noona-Portal Service Token
-        printSection('🔐 Creating Noona-Portal Service Token');
-        await createAndStoreServiceToken('noona-portal');
-        printResult('✔ Service token created and stored');
+        // 📡 JWT Public Key → Redis for Vault
+        printSection('📡 Sharing Public Key with Vault');
+        await sendPublicKeyToRedis(null, 'noona-vault');
+        printResult('✔ Public key shared with Vault via Redis');
 
         // ✅ Done!
         printDivider();

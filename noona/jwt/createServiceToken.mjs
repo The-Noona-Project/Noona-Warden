@@ -2,29 +2,30 @@
 import fs from 'fs';
 import path from 'path';
 import jwt from 'jsonwebtoken';
-import { createClient } from 'redis';
 import { printResult, printDebug, printError } from '../logger/logUtils.mjs';
 
-export const createAndStoreServiceToken = async (serviceName, expiresIn = '365d') => {
+/**
+ * Creates a JWT service token but DOES NOT store it in Redis.
+ * Caller is responsible for delivering or using it.
+ */
+export const createServiceToken = async (serviceName, expiresIn = '365d') => {
     printDebug(`[JWT] Generating service token for: ${serviceName}`);
 
-    let privateKey;
     let privateKeyPath;
-
-    // Use JWT_PRIVATE_KEY_PATH from env if available; otherwise use the fallback path.
     if (process.env.JWT_PRIVATE_KEY_PATH && fs.existsSync(process.env.JWT_PRIVATE_KEY_PATH)) {
         privateKeyPath = process.env.JWT_PRIVATE_KEY_PATH;
         printDebug(`[JWT] Using JWT_PRIVATE_KEY_PATH from env: ${privateKeyPath}`);
     } else {
         privateKeyPath = path.join('/noona/family/noona-warden/files/keys', 'private.pem');
-        printDebug(`[JWT] JWT_PRIVATE_KEY_PATH not set or file not found. Falling back to: ${privateKeyPath}`);
+        printDebug(`[JWT] Using fallback private key path: ${privateKeyPath}`);
     }
 
+    let privateKey;
     try {
         privateKey = fs.readFileSync(privateKeyPath, 'utf8');
-        printDebug(`[JWT] Private key loaded from: ${privateKeyPath}`);
+        printDebug(`[JWT] Private key loaded successfully`);
     } catch (err) {
-        printError(`[JWT] ❌ Error reading private key from disk: ${err.message}`);
+        printError(`[JWT] ❌ Failed to read private key: ${err.message}`);
         throw err;
     }
 
@@ -33,26 +34,8 @@ export const createAndStoreServiceToken = async (serviceName, expiresIn = '365d'
         scope: 'service',
         iss: 'noona-warden'
     };
+
     const token = jwt.sign(payload, privateKey, { algorithm: 'RS256', expiresIn });
-    printDebug(`[JWT] Token generated for ${serviceName}, expires in ${expiresIn}`);
-
-    // Use the REDIS_URL from environment variables.
-    const redisUrl = process.env.REDIS_URL;
-    if (!redisUrl) {
-        throw new Error('REDIS_URL environment variable is not defined');
-    }
-    const redisClient = createClient({ url: redisUrl });
-    // Use a unique Redis key for each service token.
-    const redisKey = `NOONA:TOKEN:${serviceName}`;
-
-    try {
-        await redisClient.connect();
-        await redisClient.set(redisKey, token);
-        printResult(`[JWT] ✅ Service token for '${serviceName}' stored in Redis at key: ${redisKey}`);
-    } catch (err) {
-        printError(`[JWT] ❌ Redis error storing service token: ${err.message}`);
-        throw err;
-    } finally {
-        await redisClient.disconnect();
-    }
+    printResult(`[JWT] ✅ Token generated for ${serviceName}, expires in ${expiresIn}`);
+    return token;
 };
