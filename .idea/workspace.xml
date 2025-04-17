@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Update Redis key logic and add service-specific support&#10;&#10;Modified `sendPublicKeyToRedis` to include a `serviceName` parameter, creating unique Redis keys in the format `NOONA:TOKEN:&lt;serviceName&gt;`. Improved environment variable handling and updated key-loading behavior for better flexibility and robustness.">
+    <list default="true" id="256b470f-c5d7-4e7e-a58f-b12dadd697f1" name="Changes" comment="Update package version to 1.0.1&#10;&#10;This version bump likely reflects minor changes or fixes. Ensuring the package version is accurate helps with proper versioning and package management.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/initmain.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/initmain.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/noona/jwt/createServiceToken.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/jwt/createServiceToken.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/noona/jwt/sendToRedis.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/jwt/sendToRedis.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/filesystem/build/addToConfig.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/filesystem/build/addToConfig.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/filesystem/build/buildConfig.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/filesystem/build/buildConfig.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/filesystem/fileSystemManager.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/filesystem/fileSystemManager.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noona/filesystem/load/loadConfig.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/noona/filesystem/load/loadConfig.mjs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -314,7 +315,25 @@
       <workItem from="1743889305519" duration="814000" />
       <workItem from="1743960574216" duration="484000" />
       <workItem from="1743961110185" duration="12000" />
-      <workItem from="1743961130112" duration="424000" />
+      <workItem from="1743961130112" duration="640000" />
+      <workItem from="1743962352767" duration="147000" />
+      <workItem from="1744142366998" duration="188000" />
+      <workItem from="1744145083410" duration="1000" />
+      <workItem from="1744145098028" duration="226000" />
+      <workItem from="1744156686961" duration="193000" />
+      <workItem from="1744158435335" duration="8000" />
+      <workItem from="1744158452234" duration="8000" />
+      <workItem from="1744158467506" duration="326000" />
+      <workItem from="1744220130223" duration="157000" />
+      <workItem from="1744220420329" duration="214000" />
+      <workItem from="1744221693956" duration="577000" />
+      <workItem from="1744379790744" duration="4000" />
+      <workItem from="1744379807169" duration="64000" />
+      <workItem from="1744379878712" duration="164000" />
+      <workItem from="1744560442909" duration="442000" />
+      <workItem from="1744911816554" duration="32000" />
+      <workItem from="1744913685906" duration="503000" />
+      <workItem from="1744914217528" duration="2983000" />
     </task>
     <task id="LOCAL-00001" summary="init Push">
       <option name="closed" value="true" />
@@ -508,7 +527,23 @@
       <option name="project" value="LOCAL" />
       <updated>1743858054877</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Refactor Redis key handling and service token process&#10;&#10;Updated `sendPublicKeyToRedis` to use a refined Redis key format: `NOONA:KEY:&lt;serviceName&gt;:PUBLIC`. Simplified `createServiceToken` to remove Redis storage logic, making token handling more modular and flexible. Improved environment variable usage to enhance code reliability.">
+      <option name="closed" value="true" />
+      <created>1743961763409</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1743961763410</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Update package version to 1.0.1&#10;&#10;This version bump likely reflects minor changes or fixes. Ensuring the package version is accurate helps with proper versioning and package management.">
+      <option name="closed" value="true" />
+      <created>1744380020776</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1744380020776</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -529,8 +564,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="init Push" />
-    <MESSAGE value="hooked into dockersocket&#10;checks env vars&#10;gens two tokens for each noona docker&#10;perms checks and makes network&#10;makes folder tree (i think?)&#10;checks if dockers are already there if! then download em&#10;&#10;download bar and other qol w/ logs" />
     <MESSAGE value="uuuuuhhh dont look XD" />
     <MESSAGE value="oooh i suck at commits" />
     <MESSAGE value="DOCKER PULL COMPLETE!" />
@@ -552,7 +585,11 @@
     <MESSAGE value="Add new env variables and refactor Docker workflows&#10;&#10;Added mappings for VAULT_URL in the config loader and improved JWT logic to support dynamic private key paths and Redis configurations. Refactored Docker workflows to enhance modularity, maintainability, and overall clarity in container creation and management. These updates ensure better environment alignment and robust application behavior." />
     <MESSAGE value="Add support for new env variables and enhance token handling&#10;&#10;Add VAULT_URL to environment variable mappings and improve `createServiceToken` logic to use `JWT_PRIVATE_KEY_PATH` and `REDIS_URL` from the environment when available. Ensure unique Redis keys for each service token to avoid conflicts." />
     <MESSAGE value="Update Redis key logic and add service-specific support&#10;&#10;Modified `sendPublicKeyToRedis` to include a `serviceName` parameter, creating unique Redis keys in the format `NOONA:TOKEN:&lt;serviceName&gt;`. Improved environment variable handling and updated key-loading behavior for better flexibility and robustness." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update Redis key logic and add service-specific support&#10;&#10;Modified `sendPublicKeyToRedis` to include a `serviceName` parameter, creating unique Redis keys in the format `NOONA:TOKEN:&lt;serviceName&gt;`. Improved environment variable handling and updated key-loading behavior for better flexibility and robustness." />
+    <MESSAGE value="Refactor Redis key handling and service token process&#10;&#10;Updated `sendPublicKeyToRedis` to use a refined Redis key format: `NOONA:KEY:&lt;serviceName&gt;:PUBLIC`. Simplified `createServiceToken` to remove Redis storage logic, making token handling more modular and flexible. Improved environment variable usage to enhance code reliability." />
+    <MESSAGE value="Refactor Redis key handling and service token process&#10;&#10;Updated `sendPublicKeyToRedis` to use a refined Redis key format: `NOONA:KEY:&lt;serviceName&gt;:PUBLIC`. Simplified `createServiceToken` by removing Redis storage logic, improving modularity and flexibility. Enhanced environment variable usage for better reliability and maintainability." />
+    <MESSAGE value="Refactor Redis key handling and service token process&#10;&#10;Updated `sendPublicKeyToRedis` to use a refined Redis key format: `NOONA:KEY:&lt;serviceName&gt;:PUBLIC`, ensuring consistency and uniqueness. Simplified `createServiceToken` by removing Redis storage logic, improving modularity and flexibility. Enhanced environment variable usage to boost code reliability and maintainability." />
+    <MESSAGE value="Update package version to 1.0.1&#10;&#10;This version bump likely reflects minor changes or fixes. Ensuring the package version is accurate helps with proper versioning and package management." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update package version to 1.0.1&#10;&#10;This version bump likely reflects minor changes or fixes. Ensuring the package version is accurate helps with proper versioning and package management." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
